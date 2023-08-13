@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Video Calling App" />
+    <meta name="author" content="Your Name" />
+    <title>Video Calling App</title>
+  </head>
+  <body>
+    <div id="root">
+      <h3>Video Calling App</h3>
+      <div>Status: <span id="status">Not Connected...</span></div>
+      <div id="container">
+        <button id="start-call-button">Start a vide call</button>
+      </div>
+      <br />
+      <div style="display: flex">
+        <div>
+          1
+          <video
+            id="local-video-player"
+            width="320"
+            height="240"
+            autoplay
+          ></video>
+        </div>
+        <div>
+          2
+          <video
+            id="remote-video-player"
+            width="320"
+            height="240"
+            autoplay
+          ></video>
+        </div>
+      </div>
+    </div>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script type="module" src="dist/bundle.js"></script>
+  </body>
+</html>
