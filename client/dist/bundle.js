@@ -10,13 +10,33 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./call-connection.js":
+/*!****************************!*\
+  !*** ./call-connection.js ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constants */ \"./constants.js\");\n\n\nclass CallConnection {\n  eventMap = {\n    [_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.SOCKET_ROOM_GENERATED]: [],\n    [_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.CONNECTION_STATE_CHANGED]: [],\n    [_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.SOCKET_ROOM_JOINED]: [],\n    [_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.RECEIVED_REMOTE_STREAM]: [],\n    [_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.CONNECTION_TERMINATED]: [],\n  };\n  roomId;\n  isPeerPresent;\n  peerConnection;\n  socket;\n  logger;\n\n  _registerLogger(peerConnection, socket, logger) {\n    const originalEmit = socket.emit;\n    socket.emit = function (event, ...args) {\n      logger(`Outgoing event: ${event} `, ...args);\n      originalEmit.apply(socket, [event, ...args]);\n    };\n    socket.onAny((event, ...args) => {\n      logger(`Incoming event: ${event} `, ...args);\n    });\n    peerConnection.addEventListener(\"connectionstatechange\", () => {\n      logger(\"Peer connection event: \", peerConnection.connectionState);\n    });\n  }\n\n  constructor(peerConnection, socket, logger) {\n    if (!this.peerConnection && !this.socket) {\n      this.peerConnection = peerConnection;\n      this.socket = socket;\n      this.logger = logger;\n      this.isPeerPresent = false;\n      this._registerLogger(peerConnection, socket, logger);\n    }\n  }\n\n  async _sendOffer() {\n    const offer = await this.peerConnection.createOffer();\n    await this.peerConnection.setLocalDescription(offer);\n    this.socket.emit(\"send:offer\", offer, this.roomId);\n  }\n\n  async _sendAnswer() {\n    const answer = await this.peerConnection.createAnswer();\n    await this.peerConnection.setLocalDescription(answer);\n    this.socket.emit(\"send:answer\", answer, this.roomId);\n  }\n\n  _executeEvenListereners(event, data) {\n    const callbacks = this.eventMap[event];\n    callbacks.forEach((callback) => callback(data));\n  }\n\n  _sendNegotiationOffer = async () => {\n    if (this.isPeerPresent) {\n      const offer = await this.peerConnection.createOffer();\n      await this.peerConnection.setLocalDescription(offer);\n      this.socket.emit(\"send:negotiation:offer\", offer, this.roomId);\n    }\n  };\n\n  _terminateConnection() {\n    this.peerConnection.getSenders().forEach((sender) => {\n      if (sender.track) {\n        sender.track.stop();\n      }\n    });\n    this.peerConnection.close();\n    this._executeEvenListereners(_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.CONNECTION_TERMINATED);\n  }\n\n  _setAudio(value) {\n    const audioSender = this.peerConnection\n      .getSenders()\n      .find((sender) => sender.track.kind === \"audio\");\n    if (audioSender) {\n      audioSender.track.enabled = !!value;\n    }\n  }\n\n  _setVideo(value) {\n    const videoSender = this.peerConnection\n      .getSenders()\n      .find((sender) => sender.track.kind === \"video\");\n    if (videoSender) {\n      videoSender.track.enabled = value;\n    }\n  }\n\n  async connect() {\n    this.peerConnection.addEventListener(\"icecandidate\", (event) => {\n      if (event.candidate) {\n        this.socket.emit(\"new:ice:candidate\", event.candidate, this.roomId);\n      }\n    });\n\n    this.socket.on(\"new:ice:candidate:received\", async (iceCandidate) => {\n      if (iceCandidate) {\n        try {\n          await this.peerConnection.addIceCandidate(iceCandidate);\n        } catch (e) {\n          this.logger(\"Error adding received ice candidate\", e);\n        }\n      }\n    });\n\n    const ls = await navigator.mediaDevices.getUserMedia({\n      video: true,\n      audio: true,\n    });\n    this.localStream = ls;\n\n    this.localStream.getTracks().forEach((track) => {\n      this.peerConnection.addTrack(track, this.localStream);\n    });\n\n    this.peerConnection.addEventListener(\"track\", (event) => {\n      const [remoteStream] = event.streams;\n      this.remoteStream = remoteStream;\n      this._executeEvenListereners(_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.RECEIVED_REMOTE_STREAM, {\n        remoteStream,\n      });\n    });\n\n    this.peerConnection.addEventListener(\"negotiationneeded\", (event) => {\n      this._sendNegotiationOffer();\n    });\n\n    this.peerConnection.addEventListener(\"connectionstatechange\", () => {\n      this.logger(\"Peer connection: \", this.peerConnection.connectionState);\n      this._executeEvenListereners(_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.CONNECTION_STATE_CHANGED, {\n        peerConnection: this.peerConnection.connectionState,\n      });\n    });\n\n    this.socket.on(\"socket:room:generated\", async (roomId) => {\n      this.roomId = roomId;\n      this._executeEvenListereners(_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.SOCKET_ROOM_GENERATED, { roomId });\n    });\n\n    this.socket.on(\"new:user:joined\", async () => {\n      await this._sendOffer();\n    });\n\n    this.socket.on(\"received:answer\", async (answer) => {\n      const remoteDesc = new RTCSessionDescription(answer);\n      await this.peerConnection.setRemoteDescription(remoteDesc);\n      this.socket.emit(\"answer:accepted\", this.roomId);\n    });\n\n    this.socket.on(\"connection:made\", () => {\n      this.isPeerPresent = true;\n    });\n\n    this.socket.on(\"received:offer\", async (offer) => {\n      this.peerConnection.setRemoteDescription(\n        new RTCSessionDescription(offer)\n      );\n      await this._sendAnswer();\n    });\n\n    this.socket.on(\"received:negotiation:offer\", async (offer) => {\n      this.peerConnection.setRemoteDescription(\n        new RTCSessionDescription(offer)\n      );\n      const answer = await this.peerConnection.createAnswer();\n      await this.peerConnection.setLocalDescription(answer);\n      socket.emit(\"send:negotiation:answer\", answer, this.roomId);\n    });\n\n    this.socket.on(\"received:negotiation:answer\", async (answer) => {\n      const remoteDesc = new RTCSessionDescription(answer);\n      await this.peerConnection.setRemoteDescription(remoteDesc);\n    });\n\n    this.socket.on(\"socket:room:joined\", () => {\n      this._executeEvenListereners(_constants__WEBPACK_IMPORTED_MODULE_0__.EVENTS.SOCKET_ROOM_JOINED);\n    });\n\n    this.socket.on(\"end:call\", () => {\n      this._terminateConnection();\n    });\n  }\n\n  getInvitationUrl() {\n    const currentUrl = window.location.href;\n    const invitationUrl = `${currentUrl}?roomId=${this.roomId}`;\n    return invitationUrl;\n  }\n\n  getLocalStream() {\n    return this.localStream;\n  }\n\n  getRemoteStream() {\n    return this.remoteStream;\n  }\n\n  generateRoom() {\n    this.socket.emit(\"generate:socket:room\");\n  }\n\n  joinRoom(roomId) {\n    this.socket.emit(\"join:socket:room\", roomId);\n    this.roomId = roomId;\n  }\n\n  muteAudio() {\n    this._setAudio(false);\n  }\n\n  unMuteAudio() {\n    this._setAudio(true);\n  }\n\n  muteVideo() {\n    this._setVideo(false);\n  }\n\n  unMuteVideo() {\n    this._setVideo(true);\n  }\n\n  endCall() {\n    this.socket.emit(\"end:call:start\", this.roomId);\n  }\n\n  on(event, callBack) {\n    this.eventMap[event] = [...this.eventMap[event], callBack];\n  }\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CallConnection);\n\n\n//# sourceURL=webpack://client/./call-connection.js?");
+
+/***/ }),
+
+/***/ "./constants.js":
+/*!**********************!*\
+  !*** ./constants.js ***!
+  \**********************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   EVENTS: () => (/* binding */ EVENTS)\n/* harmony export */ });\nconst EVENTS = {\n  SOCKET_ROOM_GENERATED: \"socket:room:generated\",\n  SOCKET_ROOM_JOINED: \"socket:room:joined\",\n  RECEIVED_REMOTE_STREAM: \"received:remote:stream\",\n  CONNECTION_STATE_CHANGED: \"connection:state:changed\",\n  CONNECTION_TERMINATED: \"connection:terminated\",\n};\n\n\n//# sourceURL=webpack://client/./constants.js?");
+
+/***/ }),
+
 /***/ "./index.js":
 /*!******************!*\
   !*** ./index.js ***!
   \******************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-client */ \"./node_modules/socket.io-client/build/esm/index.js\");\n\nconst socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_0__.io)();\nconst originalEmit = socket.emit;\nsocket.emit = function (event, ...args) {\n  console.log(`Outgoing event: ${event} `, ...args);\n  originalEmit.apply(socket, [event, ...args]);\n};\nsocket.onAny((event, ...args) => {\n  console.log(`sockets event: ${event} `, ...args);\n});\n\nlet isPeerPresent = false;\n\nconst configuration = {\n  iceServers: [{ urls: \"stun:stun.l.google.com:19302\" }],\n};\nconst peerConnection = new RTCPeerConnection(configuration);\n\nconst getRoomId = () => {\n  const queryString = window.location.search;\n  const queryParams = new URLSearchParams(queryString);\n  return queryParams.get(\"roomId\");\n};\nconst roomId = getRoomId();\n\nconst containerElement = document.getElementById(\"container\");\nconst startCallButton = document.getElementById(\"start-call-button\");\nconst statusElement = document.getElementById(\"status\");\nconst localVideoPlayer = document.getElementById(\"local-video-player\");\nconst remoteVideoPlayer = document.getElementById(\"remote-video-player\");\nlet ls;\nconst startVideo = async () => {\n  const localStream = await navigator.mediaDevices.getUserMedia({\n    video: true,\n    audio: true,\n  });\n  localStream.getTracks().forEach((track) => {\n    peerConnection.addTrack(track, localStream);\n  });\n  ls = localStream;\n  localVideoPlayer.srcObject = localStream;\n};\n\nlet hostRoomId;\n\nconst copyInvitationUrl = (url) => {\n  navigator.clipboard.writeText(url);\n};\n\nconst updateStatus = (status) => {\n  statusElement.innerText = status;\n};\n\nconst startNewCall = () => {\n  socket.emit(\"generate:socket:room\");\n};\n\nconst sendOffer = async () => {\n  console.log(\"isPeerPresent \", isPeerPresent);\n  if (!isPeerPresent) return;\n  const offer = await peerConnection.createOffer();\n  await peerConnection.setLocalDescription(offer);\n  socket.emit(\"send:offer\", offer, hostRoomId || roomId);\n};\n\nconst sendAnswer = async () => {\n  const answer = await peerConnection.createAnswer();\n  await peerConnection.setLocalDescription(answer);\n  socket.emit(\"send:answer\", answer, roomId || hostRoomId);\n};\n\nsocket.on(\"connected\", () => {\n  updateStatus(\"connected\");\n});\n\nsocket.on(\"socket:room:generated\", async (roomId) => {\n  hostRoomId = roomId;\n  const currentUrl = window.location.href;\n  const invitationUrl = `${currentUrl}?roomId=${roomId}`;\n\n  containerElement.innerHTML = `\n  <div> Invitation Url: <span>${invitationUrl}</span>\n  </div>\n  `;\n  updateStatus(\"Waiting for Other user\");\n  startVideo();\n});\n\nsocket.on(\"new:user:joined\", async () => {\n  isPeerPresent = true;\n  updateStatus(\"New User Joined the room\");\n  await sendOffer();\n});\n\nsocket.on(\"received:answer\", async (answer) => {\n  const remoteDesc = new RTCSessionDescription(answer);\n  await peerConnection.setRemoteDescription(remoteDesc);\n  updateStatus(\"Users connected\");\n});\n\nsocket.on(\"socket:room:joined\", () => {\n  updateStatus(\"Joined Room\");\n  // startVideo();\n});\n\nsocket.on(\"received:offer\", async (offer) => {\n  isPeerPresent = true;\n  peerConnection.setRemoteDescription(new RTCSessionDescription(offer));\n  await sendAnswer();\n  startVideo();\n});\n\nconst sendNegotiationOffer = async () => {\n  if (!isPeerPresent) return;\n  const offer = await peerConnection.createOffer();\n  await peerConnection.setLocalDescription(offer);\n  socket.emit(\"send:negotiation:offer\", offer, hostRoomId || roomId);\n};\n\nsocket.on(\"received:negotiation:offer\", async (offer) => {\n  peerConnection.setRemoteDescription(new RTCSessionDescription(offer));\n  const answer = await peerConnection.createAnswer();\n  await peerConnection.setLocalDescription(answer);\n  socket.emit(\"send:negotiation:answer\", answer, roomId || hostRoomId);\n});\n\nsocket.on(\"received:negotiation:answer\", async (answer) => {\n  const remoteDesc = new RTCSessionDescription(answer);\n  await peerConnection.setRemoteDescription(remoteDesc);\n});\n\nstartCallButton.addEventListener(\"click\", startNewCall);\n\n// Define a function to check the connection status\nfunction checkConnectionStatus() {\n  const connectionState = peerConnection.connectionState;\n  console.log(\"Connection status:\", connectionState);\n  // You can take further actions based on the connectionState\n}\n\npeerConnection.addEventListener(\"connectionstatechange\", () => {\n  checkConnectionStatus();\n  console.log(\"Peer connection: \", peerConnection.connectionState);\n  updateStatus(peerConnection.connectionState);\n});\n\npeerConnection.addEventListener(\"negotiationneeded\", async (event) => {\n  console.log(\"negotiationneeded\");\n  await sendNegotiationOffer();\n});\n\npeerConnection.addEventListener(\"track\", (event) => {\n  const [remoteStream] = event.streams;\n  console.log(\"remote stream \", remoteStream);\n  remoteVideoPlayer.srcObject = remoteStream;\n});\n\nremoteVideoPlayer.addEventListener(\"error\", (event) => {\n  console.error(\"Error occurred in video element:\", event.target.error);\n});\n\nif (roomId) {\n  socket.emit(\"join:socket:room\", roomId);\n}\n\n\n//# sourceURL=webpack://client/./index.js?");
+eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! socket.io-client */ \"./node_modules/socket.io-client/build/esm/index.js\");\n/* harmony import */ var _call_connection__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./call-connection */ \"./call-connection.js\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./constants */ \"./constants.js\");\n\n\n\nconst socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_0__.io)();\nconst configuration = {\n  iceServers: [{ urls: \"stun:stun.l.google.com:19302\" }],\n};\nconst peerConnection = new RTCPeerConnection(configuration);\nfunction logger(...args) {\n  console.log(...args);\n}\nconst callConnection = new _call_connection__WEBPACK_IMPORTED_MODULE_1__[\"default\"](peerConnection, socket, logger);\nawait callConnection.connect();\n\nconst startCall = () => {\n  callConnection.generateRoom();\n};\n\nconst displayInvitation = (invitationUrl) => {\n  const containerElement = document.getElementById(\"container\");\n  containerElement.innerHTML = `\n  <div> Invitation Url: <span>${invitationUrl}</span>\n  </div>\n  `;\n};\n\nconst displayRemoteVideo = () => {\n  const remoteStream = callConnection.getRemoteStream();\n  const remoteVideoPlayer = document.getElementById(\"remote-video-player\");\n  remoteVideoPlayer.srcObject = remoteStream;\n};\n\nconst displayLocalVideo = () => {\n  const localVideoPlayer = document.getElementById(\"local-video-player\");\n  const localStream = callConnection.getLocalStream();\n  localVideoPlayer.srcObject = localStream;\n};\n\ncallConnection.on(_constants__WEBPACK_IMPORTED_MODULE_2__.EVENTS.SOCKET_ROOM_GENERATED, () => {\n  const invitationUrl = callConnection.getInvitationUrl();\n  displayInvitation(invitationUrl);\n  displayLocalVideo();\n});\n\ncallConnection.on(_constants__WEBPACK_IMPORTED_MODULE_2__.EVENTS.RECEIVED_REMOTE_STREAM, () => {\n  displayRemoteVideo();\n});\n\ncallConnection.on(_constants__WEBPACK_IMPORTED_MODULE_2__.EVENTS.SOCKET_ROOM_JOINED, () => {\n  displayLocalVideo();\n});\n\nconst startCallButton = document.getElementById(\"start-call-button\");\nstartCallButton.addEventListener(\"click\", startCall);\n\nconst getRoomId = () => {\n  const queryString = window.location.search;\n  const queryParams = new URLSearchParams(queryString);\n  return queryParams.get(\"roomId\");\n};\nconst roomId = getRoomId();\nif (roomId) {\n  callConnection.joinRoom(roomId);\n}\n\nconst remoteVideoPlayer = document.getElementById(\"remote-video-player\");\nremoteVideoPlayer.addEventListener(\"error\", (event) => {\n  console.error(\"Error occurred in video element:\", event.target.error);\n});\n\nconst endcall = () => {\n  callConnection.endCall();\n};\nconst endCallButton = document.getElementById(\"end-call-button\");\nendCallButton.addEventListener(\"click\", endcall);\n\n// Audio\nlet isAudioMuted = false;\nconst muteAudioButton = document.getElementById(\"mute-audio-button\");\nconst toggleAudioMute = () => {\n  if (isAudioMuted) {\n    callConnection.unMuteAudio();\n    isAudioMuted = false;\n    muteAudioButton.innerText = \"Mute Audio\";\n  } else {\n    callConnection.muteAudio();\n    isAudioMuted = true;\n    muteAudioButton.innerText = \"Unmute Audio\";\n  }\n};\nmuteAudioButton.addEventListener(\"click\", toggleAudioMute);\n\n// Video\nlet isVideoMuted = false;\nconst muteVideoButton = document.getElementById(\"mute-video-button\");\nconst toggleVideoMute = () => {\n  if (isVideoMuted) {\n    callConnection.unMuteVideo();\n    isVideoMuted = false;\n    muteVideoButton.innerText = \"Mute Video\";\n  } else {\n    callConnection.muteVideo();\n    isVideoMuted = true;\n    muteVideoButton.innerText = \"Unmute Video\";\n  }\n};\nmuteVideoButton.addEventListener(\"click\", toggleVideoMute);\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } }, 1);\n\n//# sourceURL=webpack://client/./index.js?");
 
 /***/ }),
 
@@ -347,6 +367,75 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/async module */
+/******/ 	(() => {
+/******/ 		var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
+/******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
+/******/ 		var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
+/******/ 		var resolveQueue = (queue) => {
+/******/ 			if(queue && queue.d < 1) {
+/******/ 				queue.d = 1;
+/******/ 				queue.forEach((fn) => (fn.r--));
+/******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
+/******/ 			}
+/******/ 		}
+/******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
+/******/ 			if(dep !== null && typeof dep === "object") {
+/******/ 				if(dep[webpackQueues]) return dep;
+/******/ 				if(dep.then) {
+/******/ 					var queue = [];
+/******/ 					queue.d = 0;
+/******/ 					dep.then((r) => {
+/******/ 						obj[webpackExports] = r;
+/******/ 						resolveQueue(queue);
+/******/ 					}, (e) => {
+/******/ 						obj[webpackError] = e;
+/******/ 						resolveQueue(queue);
+/******/ 					});
+/******/ 					var obj = {};
+/******/ 					obj[webpackQueues] = (fn) => (fn(queue));
+/******/ 					return obj;
+/******/ 				}
+/******/ 			}
+/******/ 			var ret = {};
+/******/ 			ret[webpackQueues] = x => {};
+/******/ 			ret[webpackExports] = dep;
+/******/ 			return ret;
+/******/ 		}));
+/******/ 		__webpack_require__.a = (module, body, hasAwait) => {
+/******/ 			var queue;
+/******/ 			hasAwait && ((queue = []).d = -1);
+/******/ 			var depQueues = new Set();
+/******/ 			var exports = module.exports;
+/******/ 			var currentDeps;
+/******/ 			var outerResolve;
+/******/ 			var reject;
+/******/ 			var promise = new Promise((resolve, rej) => {
+/******/ 				reject = rej;
+/******/ 				outerResolve = resolve;
+/******/ 			});
+/******/ 			promise[webpackExports] = exports;
+/******/ 			promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
+/******/ 			module.exports = promise;
+/******/ 			body((deps) => {
+/******/ 				currentDeps = wrapDeps(deps);
+/******/ 				var fn;
+/******/ 				var getResult = () => (currentDeps.map((d) => {
+/******/ 					if(d[webpackError]) throw d[webpackError];
+/******/ 					return d[webpackExports];
+/******/ 				}))
+/******/ 				var promise = new Promise((resolve) => {
+/******/ 					fn = () => (resolve(getResult));
+/******/ 					fn.r = 0;
+/******/ 					var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
+/******/ 					currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
+/******/ 				});
+/******/ 				return fn.r ? promise : getResult();
+/******/ 			}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
+/******/ 			queue && queue.d < 0 && (queue.d = 0);
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports

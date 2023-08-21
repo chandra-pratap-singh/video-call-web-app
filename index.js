@@ -13,11 +13,9 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 
-const serverWithSocket = app.listen(3000, () => {
-  console.log("App running on port 3000");
+const serverWithSocket = app.listen(process.env.PORT || 3000, () => {
+  console.log(`App running on port ${process.env.PORT || 3000}`);
 });
-
-const roomsDb = {};
 
 const io = require("socket.io")(serverWithSocket);
 io.on("connection", (socket) => {
@@ -30,19 +28,11 @@ io.on("connection", (socket) => {
   socket.on("generate:socket:room", () => {
     const roomId = v4();
     socket.join(roomId);
-    // roomsDb[roomId] = {
-    //   host: socket.id,
-    // };
     socket.emit("socket:room:generated", roomId);
   });
 
   socket.on("join:socket:room", (roomId) => {
-    console.log("roomId ", roomId);
     socket.join(roomId);
-    // roomsDb[roomId] = {
-    //   ...roomsDb[roomId],
-    //   participants: [...(roomsDb[roomId].participants || []), socket.id],
-    // };
     socket.emit("socket:room:joined");
     socket.to(roomId).emit("new:user:joined", socket.id);
   });
@@ -55,11 +45,25 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("received:answer", answer);
   });
 
+  socket.on("answer:accepted", (roomId) => {
+    socket.emit("connection:made");
+    socket.to(roomId).emit("connection:made");
+  });
+
   socket.on("send:negotiation:offer", (offer, roomId) => {
     socket.to(roomId).emit("received:negotiation:offer", offer);
   });
 
   socket.on("send:negotiation:answer", (answer, roomId) => {
     socket.to(roomId).emit("received:negotiation:answer", answer);
+  });
+
+  socket.on("new:ice:candidate", (iceCandidate, roomId) => {
+    socket.to(roomId).emit("new:ice:candidate:received", iceCandidate);
+  });
+
+  socket.on("end:call:start", (roomId) => {
+    socket.emit("end:call");
+    socket.to(roomId).emit("end:call");
   });
 });

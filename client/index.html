@@ -13,6 +13,9 @@
       <div id="container">
         <button id="start-call-button">Start a vide call</button>
       </div>
+      <button id="end-call-button">End Call</button>
+      <button id="mute-audio-button">Mute Audio</button>
+      <button id="mute-video-button">Mute Video</button>
       <br />
       <div style="display: flex">
         <div>
@@ -22,6 +25,7 @@
             width="320"
             height="240"
             autoplay
+            muted
           ></video>
         </div>
         <div>
@@ -35,7 +39,6 @@
         </div>
       </div>
     </div>
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
     <script type="module" src="dist/bundle.js"></script>
   </body>
 </html>
