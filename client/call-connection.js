@@ -192,6 +192,10 @@ class CallConnection {
     return invitationUrl;
   }
 
+  getRoomId() {
+    return this.roomId;
+  }
+
   getLocalStream() {
     return this.localStream;
   }
@@ -230,7 +234,15 @@ class CallConnection {
   }
 
   on(event, callBack) {
-    this.eventMap[event] = [...this.eventMap[event], callBack];
+    if (!this.eventMap[event].includes(callBack)) {
+      this.eventMap[event] = [...this.eventMap[event], callBack];
+    }
+  }
+
+  off(event, callBack) {
+    this.eventMap[event] = this.eventMap[event].filter(
+      (item) => item !== callBack
+    );
   }
 }
 
