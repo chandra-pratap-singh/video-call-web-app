@@ -30,6 +30,7 @@ export const App = ({ callConnection }) => {
         return html`<${Invitation}
           invitationUrl=${invitationUrl}
           redirectToPage=${setActivePage}
+          roomId=${roomId}
         />`;
       case pages.meetingRoom.pageId:
         return html`<${MeetingRoom}
