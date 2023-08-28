@@ -8,6 +8,7 @@ const PAGE_STYLE = {
   flexDirection: "column",
   padding: "0px",
   margin: "0px",
+  backgroundColor: "#333333",
 };
 
 const VIDEO_CONTAINER_STYLE = {
@@ -17,15 +18,13 @@ const VIDEO_CONTAINER_STYLE = {
 
 const BOTTOM_BAR_STYLE = {
   backgroundColor: "#3C3C3C",
-  height: "10vh",
+  height: "8vh",
 };
 
-const REMOTE_VIDEO_STYLE = {
-  left: "0px",
-  right: "0px",
-  top: "0px",
-  bottom: "0px",
-  position: "absolute",
+const REMOTE_VIDEO_CONTAINER_STYLE = {
+  display: "flex",
+  justifyContent: "center",
+  height: "100%",
 };
 
 const LOCAL_VIDEO_STYLE = {
@@ -59,17 +58,16 @@ export const MeetingRoom = ({ roomId, callConnection }) => {
 
   return html`<div style=${PAGE_STYLE}>
     <div style=${VIDEO_CONTAINER_STYLE}>
-      <video
-        ref=${remoteVideoRef}
-        width="100%"
-        height="100%"
-        id="remote-video-player"
-        autoplay
-        style=${REMOTE_VIDEO_STYLE}
-      ></video>
+      <div style=${REMOTE_VIDEO_CONTAINER_STYLE}>
+        <video
+          ref=${remoteVideoRef}
+          height="100%"
+          id="remote-video-player"
+          autoplay
+        ></video>
+      </div>
       <video
         ref=${localVideoRef}
-        width="25%"
         height="25%"
         id="local-video-player"
         autoplay
