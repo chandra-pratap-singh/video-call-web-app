@@ -1,4 +1,4 @@
-import { CopyIcon } from "../icons/mingcute_copy-line";
+import { CopyIcon } from "./icons/copy";
 import html from "../rendering-library";
 import { pages } from "./constants";
 
@@ -35,8 +35,6 @@ const COPY_CODE_STYLE = {
   display: "flex",
   gap: "32px",
   justifyContent: "space-between",
-  //   width: "100%",
-  //   border: "1px solid red",
 };
 
 const START_NOW_BUTTON_STYLE = {

@@ -15,9 +15,9 @@ const PAGE_STYLE = {
 };
 
 const CONTAINER_STYLE = {
-  width: "40%",
   border: `2px solid ${BORDER_BG_COLOR}`,
   padding: "32px",
+  borderRadius: "4px",
 };
 
 const PADDED_ITEM_STYLE = {
@@ -32,6 +32,7 @@ const INPUT_WITH_BUTTON_STYLE = {
   height: "40px",
   alignItems: "streach",
   border: `0.5px solid ${BORDER_BG_COLOR}`,
+  borderRadius: "4px",
 };
 
 const ROOM_INPUT_STYLE = {
@@ -39,6 +40,7 @@ const ROOM_INPUT_STYLE = {
   backgroundColor: "#F3F3F3",
   border: "0px",
   fontSize: "1rem",
+  width: "320px",
   padding: "6px",
 };
 

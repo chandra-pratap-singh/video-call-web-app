@@ -1,4 +1,4 @@
-import html from "../rendering-library";
+import html from "../../rendering-library";
 
 export const CopyIcon = () => {
   return html`
