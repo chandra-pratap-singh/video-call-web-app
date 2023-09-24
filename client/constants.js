@@ -4,4 +4,5 @@ export const EVENTS = {
   RECEIVED_REMOTE_STREAM: "received:remote:stream",
   CONNECTION_STATE_CHANGED: "connection:state:changed",
   CONNECTION_TERMINATED: "connection:terminated",
+  CONNECTION_STEPS_COMPLETED: "connection:steps:completed",
 };

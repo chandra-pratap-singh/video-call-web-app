@@ -7,12 +7,15 @@ class CallConnection {
     [EVENTS.SOCKET_ROOM_JOINED]: [],
     [EVENTS.RECEIVED_REMOTE_STREAM]: [],
     [EVENTS.CONNECTION_TERMINATED]: [],
+    [EVENTS.CONNECTION_STEPS_COMPLETED]: [],
   };
   roomId;
-  isPeerPresent;
   peerConnection;
   socket;
   logger;
+  peerConnectionList;
+  localStream;
+  isSendingOffer = false;
 
   _registerLogger(peerConnection, socket, logger) {
     const originalEmit = socket.emit;
@@ -29,24 +32,32 @@ class CallConnection {
   }
 
   constructor(peerConnection, socket, logger) {
-    if (!this.peerConnection && !this.socket) {
-      this.peerConnection = peerConnection;
-      this.socket = socket;
-      this.logger = logger;
-      this.isPeerPresent = false;
-      this._registerLogger(peerConnection, socket, logger);
-    }
+    // if (!this.peerConnection && !this.socket) {
+    this.peerConnection = peerConnection;
+    this.socket = socket;
+    this.logger = logger;
+    this._registerLogger(peerConnection, socket, logger);
+    // }
   }
 
   async _sendOffer() {
-    const offer = await this.peerConnection.createOffer();
-    await this.peerConnection.setLocalDescription(offer);
-    this.socket.emit("send:offer", offer, this.roomId);
+    // const offer = await this.peerConnection.createOffer();
+    try {
+      this.isSendingOffer = true;
+      await this.peerConnection.setLocalDescription();
+      const offer = this.peerConnection.localDescription;
+      this.socket.emit("send:offer", offer, this.roomId);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.isSendingOffer = false;
+    }
   }
 
   async _sendAnswer() {
-    const answer = await this.peerConnection.createAnswer();
-    await this.peerConnection.setLocalDescription(answer);
+    // const answer = await this.peerConnection.createAnswer();
+    await this.peerConnection.setLocalDescription();
+    const answer = this.peerConnection.localDescription;
     this.socket.emit("send:answer", answer, this.roomId);
   }
 
@@ -55,13 +66,11 @@ class CallConnection {
     callbacks.forEach((callback) => callback(data));
   }
 
-  _sendNegotiationOffer = async () => {
-    if (this.isPeerPresent) {
-      const offer = await this.peerConnection.createOffer();
-      await this.peerConnection.setLocalDescription(offer);
-      this.socket.emit("send:negotiation:offer", offer, this.roomId);
-    }
-  };
+  // _sendNegotiationOffer = async () => {
+  //   const offer = await this.peerConnection.createOffer();
+  //   await this.peerConnection.setLocalDescription(offer);
+  //   this.socket.emit("send:negotiation:offer", offer, this.roomId);
+  // };
 
   _terminateConnection() {
     this.peerConnection.getSenders().forEach((sender) => {
@@ -91,6 +100,20 @@ class CallConnection {
     }
   }
 
+  async _shareStream() {
+    console.log("Function called");
+    const ls = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+    this.localStream = ls;
+
+    this.localStream.getTracks().forEach((track) => {
+      console.log("called inside track ", this.peerConnection);
+      this.peerConnection.addTrack(track, this.localStream);
+    });
+  }
+
   async connect() {
     this.peerConnection.addEventListener("icecandidate", (event) => {
       if (event.candidate) {
@@ -99,7 +122,11 @@ class CallConnection {
     });
 
     this.socket.on("new:ice:candidate:received", async (iceCandidate) => {
-      if (iceCandidate) {
+      if (
+        iceCandidate &&
+        (this.peerConnection.iceConnectionState === "have-remote-offer" ||
+          this.peerConnection.iceConnectionState === "have-local-offer")
+      ) {
         try {
           await this.peerConnection.addIceCandidate(iceCandidate);
         } catch (e) {
@@ -108,18 +135,13 @@ class CallConnection {
       }
     });
 
-    const ls = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    this.localStream = ls;
-
-    this.localStream.getTracks().forEach((track) => {
-      this.peerConnection.addTrack(track, this.localStream);
-    });
+    // this.peerConnection.ontrack(() => {
+    //   console.log("ontrack called");
+    // });
 
     this.peerConnection.addEventListener("track", (event) => {
       const [remoteStream] = event.streams;
+      console.log("received track ", remoteStream);
       this.remoteStream = remoteStream;
       this._executeEvenListereners(EVENTS.RECEIVED_REMOTE_STREAM, {
         remoteStream,
@@ -127,7 +149,8 @@ class CallConnection {
     });
 
     this.peerConnection.addEventListener("negotiationneeded", (event) => {
-      this._sendNegotiationOffer();
+      // this._sendNegotiationOffer();
+      this._sendOffer();
     });
 
     this.peerConnection.addEventListener("connectionstatechange", () => {
@@ -149,14 +172,21 @@ class CallConnection {
     this.socket.on("received:answer", async (answer) => {
       const remoteDesc = new RTCSessionDescription(answer);
       await this.peerConnection.setRemoteDescription(remoteDesc);
+      // await this._shareStream();
       this.socket.emit("answer:accepted", this.roomId);
     });
 
-    this.socket.on("connection:made", () => {
-      this.isPeerPresent = true;
+    this.socket.on("connection:steps:completed", () => {
+      // await this._shareStream();
+      this._executeEvenListereners(EVENTS.CONNECTION_STEPS_COMPLETED);
     });
 
     this.socket.on("received:offer", async (offer) => {
+      if (
+        this.isSendingOffer ||
+        this.peerConnection.signalingState !== "stable"
+      )
+        return;
       this.peerConnection.setRemoteDescription(
         new RTCSessionDescription(offer)
       );
@@ -164,17 +194,31 @@ class CallConnection {
     });
 
     this.socket.on("received:negotiation:offer", async (offer) => {
+      // if (
+      //   this.peerConnection.signalingState === "have-remote-offer" ||
+      //   this.peerConnection.signalingState === "have-local-pranswer"
+      // ) {
       this.peerConnection.setRemoteDescription(
         new RTCSessionDescription(offer)
       );
       const answer = await this.peerConnection.createAnswer();
       await this.peerConnection.setLocalDescription(answer);
-      socket.emit("send:negotiation:answer", answer, this.roomId);
+      this.socket.emit("send:negotiation:answer", answer, this.roomId);
+      // }
     });
 
     this.socket.on("received:negotiation:answer", async (answer) => {
+      console.log(
+        "this.peerConnection.signalingState ",
+        this.peerConnection.signalingState
+      );
+      // if (
+      //   this.peerConnection.signalingState === "have-remote-offer" ||
+      //   this.peerConnection.signalingState === "have-local-pranswer"
+      // ) {
       const remoteDesc = new RTCSessionDescription(answer);
       await this.peerConnection.setRemoteDescription(remoteDesc);
+      // }
     });
 
     this.socket.on("socket:room:joined", () => {
@@ -231,6 +275,10 @@ class CallConnection {
 
   endCall() {
     this.socket.emit("end:call:start", this.roomId);
+  }
+
+  async startVideo() {
+    await this._shareStream();
   }
 
   on(event, callBack) {

@@ -46,8 +46,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("answer:accepted", (roomId) => {
-    socket.emit("connection:made");
-    socket.to(roomId).emit("connection:made");
+    socket.emit("connection:steps:completed");
+    socket.to(roomId).emit("connection:steps:completed");
   });
 
   socket.on("send:negotiation:offer", (offer, roomId) => {

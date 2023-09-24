@@ -60,7 +60,11 @@ export const MeetingRoom = ({ roomId, callConnection }) => {
 
   useEffect(() => {
     function displayRemoteVideo() {
+      remoteVideoRef.onerror = function (err) {
+        alert("Error! Something went wrong ", err);
+      };
       const remoteStream = callConnection.getRemoteStream();
+      console.log("called display video ", remoteStream);
       remoteVideoRef.current.srcObject = remoteStream;
     }
     callConnection.on(EVENTS.RECEIVED_REMOTE_STREAM, displayRemoteVideo);
@@ -69,13 +73,27 @@ export const MeetingRoom = ({ roomId, callConnection }) => {
     };
   }, []);
 
-  useEffect(() => {
-    function displayLocalVideo() {
+  useEffect(async () => {
+    try {
+      await callConnection.startVideo();
       const localStream = callConnection.getLocalStream();
       localVideoRef.current.srcObject = localStream;
+    } catch (err) {
+      console.error("Error: ", err);
     }
-    displayLocalVideo();
+    // callConnection.on(EVENTS.CONNECTION_STEPS_COMPLETED, displayLocalVideo);
+    // return () => {
+    //   callConnection.off(EVENTS.CONNECTION_STEPS_COMPLETED, displayLocalVideo);
+    // };
   }, []);
+
+  // useEffect(async () => {
+  //   try {
+  //     await callConnection.startVideo();
+  //   } catch (err) {
+  //     console.log("Error: ", err);
+  //   }
+  // });
 
   const toggleAudioMute = () => {
     if (isAudioMuted) {
