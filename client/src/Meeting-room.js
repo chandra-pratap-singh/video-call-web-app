@@ -81,19 +81,7 @@ export const MeetingRoom = ({ roomId, callConnection }) => {
     } catch (err) {
       console.error("Error: ", err);
     }
-    // callConnection.on(EVENTS.CONNECTION_STEPS_COMPLETED, displayLocalVideo);
-    // return () => {
-    //   callConnection.off(EVENTS.CONNECTION_STEPS_COMPLETED, displayLocalVideo);
-    // };
   }, []);
-
-  // useEffect(async () => {
-  //   try {
-  //     await callConnection.startVideo();
-  //   } catch (err) {
-  //     console.log("Error: ", err);
-  //   }
-  // });
 
   const toggleAudioMute = () => {
     if (isAudioMuted) {
