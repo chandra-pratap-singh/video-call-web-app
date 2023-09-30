@@ -1,4 +1,4 @@
-import { EVENTS } from "./constants";
+import { EVENTS } from "../../constants";
 
 class CallConnection {
   eventMap = {
@@ -31,17 +31,115 @@ class CallConnection {
     });
   }
 
-  constructor(peerConnection, socket, logger) {
-    // if (!this.peerConnection && !this.socket) {
+  _joinRoom(socket, roomId) {
+    socket.emit("join:socket:room", roomId);
+  }
+
+  _connect() {
+    this.peerConnection.addEventListener("icecandidate", (event) => {
+      if (event.candidate) {
+        this.socket.emit("new:ice:candidate", event.candidate, this.roomId);
+      }
+    });
+
+    this.socket.on("new:ice:candidate:received", async (iceCandidate) => {
+      if (
+        iceCandidate &&
+        (this.peerConnection.iceConnectionState === "have-remote-offer" ||
+          this.peerConnection.iceConnectionState === "have-local-offer")
+      ) {
+        try {
+          await this.peerConnection.addIceCandidate(iceCandidate);
+        } catch (e) {
+          this.logger("Error adding received ice candidate", e);
+        }
+      }
+    });
+
+    this.peerConnection.addEventListener("track", (event) => {
+      const [remoteStream] = event.streams;
+      this.remoteStream = remoteStream;
+      this._executeEvenListereners(EVENTS.RECEIVED_REMOTE_STREAM, {
+        remoteStream,
+      });
+    });
+
+    this.peerConnection.addEventListener("negotiationneeded", () => {
+      this._sendOffer();
+    });
+
+    this.peerConnection.addEventListener("connectionstatechange", () => {
+      this.logger("Peer connection: ", this.peerConnection.connectionState);
+      this._executeEvenListereners(EVENTS.CONNECTION_STATE_CHANGED, {
+        peerConnection: this.peerConnection.connectionState,
+      });
+    });
+
+    this.socket.on("socket:room:generated", async (roomId) => {
+      this.roomId = roomId;
+      this._executeEvenListereners(EVENTS.SOCKET_ROOM_GENERATED, { roomId });
+    });
+
+    this.socket.on("new:user:joined", async () => {
+      await this._sendOffer();
+    });
+
+    this.socket.on("received:answer", async (answer) => {
+      const remoteDesc = new RTCSessionDescription(answer);
+      await this.peerConnection.setRemoteDescription(remoteDesc);
+      this.socket.emit("answer:accepted", this.roomId);
+    });
+
+    this.socket.on("connection:steps:completed", () => {
+      this._executeEvenListereners(EVENTS.CONNECTION_STEPS_COMPLETED);
+    });
+
+    this.socket.on("received:offer", async (offer) => {
+      if (
+        this.isSendingOffer ||
+        this.peerConnection.signalingState !== "stable"
+      )
+        return;
+      this.peerConnection.setRemoteDescription(
+        new RTCSessionDescription(offer)
+      );
+      await this._sendAnswer();
+    });
+
+    this.socket.on("received:negotiation:offer", async (offer) => {
+      this.peerConnection.setRemoteDescription(
+        new RTCSessionDescription(offer)
+      );
+      const answer = await this.peerConnection.createAnswer();
+      await this.peerConnection.setLocalDescription(answer);
+      this.socket.emit("send:negotiation:answer", answer, this.roomId);
+    });
+
+    this.socket.on("received:negotiation:answer", async (answer) => {
+      const remoteDesc = new RTCSessionDescription(answer);
+      await this.peerConnection.setRemoteDescription(remoteDesc);
+    });
+
+    this.socket.on("socket:room:joined", () => {
+      this._executeEvenListereners(EVENTS.SOCKET_ROOM_JOINED);
+    });
+
+    this.socket.on("end:call", () => {
+      this._terminateConnection();
+    });
+  }
+
+  constructor(peerConnection, socket, logger, roomId) {
     this.peerConnection = peerConnection;
     this.socket = socket;
     this.logger = logger;
+    this.roomId = roomId;
     this._registerLogger(peerConnection, socket, logger);
-    // }
+    this._connect();
+    this._joinRoom(socket, roomId);
   }
 
   async _sendOffer() {
-    // const offer = await this.peerConnection.createOffer();
     try {
       this.isSendingOffer = true;
       await this.peerConnection.setLocalDescription();
@@ -55,7 +153,6 @@ class CallConnection {
   }
 
   async _sendAnswer() {
-    // const answer = await this.peerConnection.createAnswer();
     await this.peerConnection.setLocalDescription();
     const answer = this.peerConnection.localDescription;
     this.socket.emit("send:answer", answer, this.roomId);
@@ -65,12 +162,6 @@ class CallConnection {
     const callbacks = this.eventMap[event];
     callbacks.forEach((callback) => callback(data));
   }
-
-  // _sendNegotiationOffer = async () => {
-  //   const offer = await this.peerConnection.createOffer();
-  //   await this.peerConnection.setLocalDescription(offer);
-  //   this.socket.emit("send:negotiation:offer", offer, this.roomId);
-  // };
 
   _terminateConnection() {
     this.peerConnection.getSenders().forEach((sender) => {
@@ -101,7 +192,6 @@ class CallConnection {
   }
 
   async _shareStream() {
-    console.log("Function called");
     const ls = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
@@ -109,131 +199,8 @@ class CallConnection {
     this.localStream = ls;
 
     this.localStream.getTracks().forEach((track) => {
-      console.log("called inside track ", this.peerConnection);
       this.peerConnection.addTrack(track, this.localStream);
     });
-  }
-
-  async connect() {
-    this.peerConnection.addEventListener("icecandidate", (event) => {
-      if (event.candidate) {
-        this.socket.emit("new:ice:candidate", event.candidate, this.roomId);
-      }
-    });
-
-    this.socket.on("new:ice:candidate:received", async (iceCandidate) => {
-      if (
-        iceCandidate &&
-        (this.peerConnection.iceConnectionState === "have-remote-offer" ||
-          this.peerConnection.iceConnectionState === "have-local-offer")
-      ) {
-        try {
-          await this.peerConnection.addIceCandidate(iceCandidate);
-        } catch (e) {
-          this.logger("Error adding received ice candidate", e);
-        }
-      }
-    });
-
-    // this.peerConnection.ontrack(() => {
-    //   console.log("ontrack called");
-    // });
-
-    this.peerConnection.addEventListener("track", (event) => {
-      const [remoteStream] = event.streams;
-      console.log("received track ", remoteStream);
-      this.remoteStream = remoteStream;
-      this._executeEvenListereners(EVENTS.RECEIVED_REMOTE_STREAM, {
-        remoteStream,
-      });
-    });
-
-    this.peerConnection.addEventListener("negotiationneeded", (event) => {
-      // this._sendNegotiationOffer();
-      this._sendOffer();
-    });
-
-    this.peerConnection.addEventListener("connectionstatechange", () => {
-      this.logger("Peer connection: ", this.peerConnection.connectionState);
-      this._executeEvenListereners(EVENTS.CONNECTION_STATE_CHANGED, {
-        peerConnection: this.peerConnection.connectionState,
-      });
-    });
-
-    this.socket.on("socket:room:generated", async (roomId) => {
-      this.roomId = roomId;
-      this._executeEvenListereners(EVENTS.SOCKET_ROOM_GENERATED, { roomId });
-    });
-
-    this.socket.on("new:user:joined", async () => {
-      await this._sendOffer();
-    });
-
-    this.socket.on("received:answer", async (answer) => {
-      const remoteDesc = new RTCSessionDescription(answer);
-      await this.peerConnection.setRemoteDescription(remoteDesc);
-      // await this._shareStream();
-      this.socket.emit("answer:accepted", this.roomId);
-    });
-
-    this.socket.on("connection:steps:completed", () => {
-      // await this._shareStream();
-      this._executeEvenListereners(EVENTS.CONNECTION_STEPS_COMPLETED);
-    });
-
-    this.socket.on("received:offer", async (offer) => {
-      if (
-        this.isSendingOffer ||
-        this.peerConnection.signalingState !== "stable"
-      )
-        return;
-      this.peerConnection.setRemoteDescription(
-        new RTCSessionDescription(offer)
-      );
-      await this._sendAnswer();
-    });
-
-    this.socket.on("received:negotiation:offer", async (offer) => {
-      // if (
-      //   this.peerConnection.signalingState === "have-remote-offer" ||
-      //   this.peerConnection.signalingState === "have-local-pranswer"
-      // ) {
-      this.peerConnection.setRemoteDescription(
-        new RTCSessionDescription(offer)
-      );
-      const answer = await this.peerConnection.createAnswer();
-      await this.peerConnection.setLocalDescription(answer);
-      this.socket.emit("send:negotiation:answer", answer, this.roomId);
-      // }
-    });
-
-    this.socket.on("received:negotiation:answer", async (answer) => {
-      console.log(
-        "this.peerConnection.signalingState ",
-        this.peerConnection.signalingState
-      );
-      // if (
-      //   this.peerConnection.signalingState === "have-remote-offer" ||
-      //   this.peerConnection.signalingState === "have-local-pranswer"
-      // ) {
-      const remoteDesc = new RTCSessionDescription(answer);
-      await this.peerConnection.setRemoteDescription(remoteDesc);
-      // }
-    });
-
-    this.socket.on("socket:room:joined", () => {
-      this._executeEvenListereners(EVENTS.SOCKET_ROOM_JOINED);
-    });
-
-    this.socket.on("end:call", () => {
-      this._terminateConnection();
-    });
-  }
-
-  getInvitationUrl() {
-    const currentUrl = window.location.href;
-    const invitationUrl = `${currentUrl}?roomId=${this.roomId}`;
-    return invitationUrl;
   }
 
   getRoomId() {
@@ -246,15 +213,6 @@ class CallConnection {
 
   getRemoteStream() {
     return this.remoteStream;
-  }
-
-  generateRoom() {
-    this.socket.emit("generate:socket:room");
-  }
-
-  joinRoom(roomId) {
-    this.socket.emit("join:socket:room", roomId);
-    this.roomId = roomId;
   }
 
   muteAudio() {

@@ -1,4 +1,4 @@
-import html from "../../rendering-library";
+import html from "../libraries/rendering-library";
 
 export const Video = () => {
   return html` <svg

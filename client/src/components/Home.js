@@ -1,7 +1,7 @@
-import html from "../rendering-library";
-import { useEffect } from "preact/hooks";
-import { pages } from "./constants";
-import { EVENTS } from "../constants";
+import html from "../libraries/rendering-library";
+import { pages } from "../constants";
+import { v4 as uuidv4 } from "uuid";
+import { getInvitationUrl } from "../utils/utils";
 
 const BUTTON_BG_COLOR = "#D9D9D9";
 const BORDER_BG_COLOR = "#CCCCCC";
@@ -74,7 +74,6 @@ const START_NEW_MEETING_BUTTON_STYLE = {
 export const Home = ({
   roomId,
   setRoomId,
-  callConnection,
   redirectToPage,
   setInvitationUrl,
 }) => {
@@ -85,22 +84,17 @@ export const Home = ({
   };
 
   const startNewCall = () => {
-    callConnection.generateRoom();
+    const newRoomId = uuidv4();
+    const invitationUrl = getInvitationUrl(newRoomId);
+    setInvitationUrl(invitationUrl);
+    setRoomId(newRoomId);
+    redirectToPage(pages.invitation.pageId);
   };
 
-  useEffect(() => {
-    function handleRoomGenerated() {
-      const invitationUrl = callConnection.getInvitationUrl();
-      const generatedRoomId = callConnection.getRoomId();
-      setInvitationUrl(invitationUrl);
-      setRoomId(generatedRoomId);
-      redirectToPage(pages.invitation.pageId);
-    }
-    callConnection.on(EVENTS.SOCKET_ROOM_GENERATED, handleRoomGenerated);
-    return () => {
-      callConnection.off(EVENTS.SOCKET_ROOM_GENERATED, handleRoomGenerated);
-    };
-  }, []);
+  const joinRoom = () => {
+    const invitationUrl = getInvitationUrl(roomId);
+    location.assign(invitationUrl);
+  };
 
   return html`<div style=${PAGE_STYLE}>
     <div style=${CONTAINER_STYLE}>
@@ -112,7 +106,9 @@ export const Home = ({
             style=${ROOM_INPUT_STYLE}
             placeholder="Enter room Id"
           />
-          <button style=${JOIN_ROOM_BUTTON_STYLE}>Join Room</button>
+          <button style=${JOIN_ROOM_BUTTON_STYLE} onclick="${joinRoom}">
+            Join Room
+          </button>
         </div>
       </div>
       <div style=${{ ...OR_STYLE }}>OR</div>

@@ -1,6 +1,6 @@
-import { CopyIcon } from "./icons/copy";
-import html from "../rendering-library";
-import { pages } from "./constants";
+import { CopyIcon } from "../icons/copy";
+import html from "../libraries/rendering-library";
+import { pages } from "../constants";
 
 const PAGE_STYLE = {
   minHeight: "100vh",
@@ -58,9 +58,9 @@ const ICON_BUTTON_STYLE = {
   cursor: "pointer",
 };
 
-export const Invitation = ({ invitationUrl, roomId, redirectToPage }) => {
+export const Invitation = ({ invitationUrl, roomId }) => {
   const startCall = () => {
-    redirectToPage(pages.meetingRoom.pageId);
+    location.assign(invitationUrl);
   };
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);

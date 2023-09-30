@@ -1,16 +1,14 @@
-import html from "../rendering-library";
-import { useState, useCallback, useMemo } from "preact/hooks";
-import { Home } from "./Home";
-import { Invitation } from "./Invitation";
+import html from "./libraries/rendering-library";
+import { useState, useMemo } from "preact/hooks";
+import { Home } from "./components/Home";
+import { Invitation } from "./components/Invitation";
 import { pages } from "./constants";
-import { MeetingRoom } from "./Meeting-room";
-import { getRoomId } from "./utils";
+import { MeetingRoom } from "./components/Meeting-room";
+import { getRoomId } from "./utils/utils";
+import { CallEnded } from "./components/CallEnded";
 
-export const App = ({ callConnection }) => {
+export const App = () => {
   const existingRoomIdFromUrl = getRoomId();
-  if (existingRoomIdFromUrl) {
-    callConnection.joinRoom(existingRoomIdFromUrl);
-  }
   const [roomId, setRoomId] = useState(existingRoomIdFromUrl);
   const [activePage, setActivePage] = useState(
     existingRoomIdFromUrl ? pages.meetingRoom.pageId : pages.home.pageId
@@ -23,7 +21,6 @@ export const App = ({ callConnection }) => {
           redirectToPage=${setActivePage}
           roomId=${roomId}
           setRoomId=${setRoomId}
-          callConnection=${callConnection}
           setInvitationUrl=${setInvitationUrl}
         />`;
       case pages.invitation.pageId:
@@ -35,8 +32,10 @@ export const App = ({ callConnection }) => {
       case pages.meetingRoom.pageId:
         return html`<${MeetingRoom}
           roomId=${roomId}
-          callConnection=${callConnection}
+          redirectToPage=${setActivePage}
         />`;
+      case pages.callEnded.pageId:
+        return html`<${CallEnded} />`;
     }
   });
   return ActiveComponent;

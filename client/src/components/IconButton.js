@@ -1,4 +1,4 @@
-import html from "../rendering-library";
+import html from "../libraries/rendering-library";
 
 const ICON_BUTTON_STYLE = {
   border: "0px",
