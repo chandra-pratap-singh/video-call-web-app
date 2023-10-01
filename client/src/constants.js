@@ -21,11 +21,3 @@ export const CONNECTION_STATES = {
   failed: { key: "failed", displayMessage: "Connection Failed!" },
   closed: { key: "closed", displayMessage: "Connection Closed!" },
 };
-
-const condition = [
-  "participant not present = new = Waiting",
-  "connection failed = connection failed",
-  "disconnected = disconnected",
-  "videooff = userIcon",
-  "connected and video on = video",
-];

@@ -8,6 +8,8 @@ class CallConnection {
     [EVENTS.RECEIVED_REMOTE_STREAM]: [],
     [EVENTS.CONNECTION_TERMINATED]: [],
     [EVENTS.CONNECTION_STEPS_COMPLETED]: [],
+    [EVENTS.VIDEO_TRACK_TOGGLED]: [],
+    [EVENTS.AUDIO_TRACK_TOGGLED]: [],
   };
   roomId;
   peerConnection;
@@ -127,6 +129,14 @@ class CallConnection {
     this.socket.on("end:call", () => {
       this._terminateConnection();
     });
+
+    this.socket.on("video:track:toggle", (value) => {
+      this._executeEvenListereners(EVENTS.VIDEO_TRACK_TOGGLED, value);
+    });
+
+    this.socket.on("audio:track:toggle", (value) => {
+      this._executeEvenListereners(EVENTS.AUDIO_TRACK_TOGGLED, value);
+    });
   }
 
   constructor(peerConnection, socket, logger, roomId) {
@@ -179,6 +189,7 @@ class CallConnection {
       .find((sender) => sender.track.kind === "audio");
     if (audioSender) {
       audioSender.track.enabled = !!value;
+      this.socket.emit("audio:track:toggle", this.roomId, !!value);
     }
   }
 
@@ -188,6 +199,7 @@ class CallConnection {
       .find((sender) => sender.track.kind === "video");
     if (videoSender) {
       videoSender.track.enabled = value;
+      this.socket.emit("video:track:toggle", this.roomId, !!value);
     }
   }
 

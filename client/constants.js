@@ -5,4 +5,6 @@ export const EVENTS = {
   CONNECTION_STATE_CHANGED: "connection:state:changed",
   CONNECTION_TERMINATED: "connection:terminated",
   CONNECTION_STEPS_COMPLETED: "connection:steps:completed",
+  VIDEO_TRACK_TOGGLED: "video:track:toggle",
+  AUDIO_TRACK_TOGGLED: "audio:track:toggle",
 };

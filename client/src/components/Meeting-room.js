@@ -45,12 +45,30 @@ const REMOTE_VIDEO_CONTAINER_STYLE = {
   height: "100%",
 };
 
-const LOCAL_VIDEO_STYLE = {
+const LOCAL_VIDEO_CONTAINER_STYLE = {
   position: "absolute",
   right: "16px",
   bottom: "16px",
   border: "2px solid white",
   borderRadius: "8px",
+  height: "25%",
+};
+
+const THUMBNAIL_OVERLAY_CONTAINER_STYLE = {
+  position: "absolute",
+  right: "0px",
+  left: "0px",
+  top: "0px",
+  bottom: "0px",
+  height: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
+
+const LOCAL_VIDEO_STYLE = {
+  height: "100%",
+  width: "100%",
 };
 
 export const MeetingRoom = ({ roomId, redirectToPage }) => {
@@ -66,7 +84,13 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
     CONNECTION_STATES.new.key
   );
 
+  const [isRemoteVideoTrackAvailable, setIsRemoteVideoTrackAvailable] =
+    useState(false);
+  const [isRemoteAudioTrackAvailable, setIsRemoteAudioTrackAvailable] =
+    useState(false);
+
   const [remoteStream, setRemoteStream] = useState();
+  const [localStream, setLocalStream] = useState();
 
   useEffect(() => {
     if (callConnection) {
@@ -74,6 +98,8 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
         const remoteStream = callConnection.getRemoteStream();
         // remoteVideoRef.current.srcObject = remoteStream;
         setRemoteStream(remoteStream);
+        setIsRemoteVideoTrackAvailable(true);
+        setIsRemoteAudioTrackAvailable(true);
       }
       callConnection.on(EVENTS.RECEIVED_REMOTE_STREAM, displayRemoteVideo);
       return () => {
@@ -87,7 +113,8 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
       try {
         await callConnection.startVideo();
         const localStream = callConnection.getLocalStream();
-        localVideoRef.current.srcObject = localStream;
+        // localVideoRef.current.srcObject = localStream;
+        setLocalStream(localStream);
       } catch (err) {
         console.error("Error: ", err);
       }
@@ -120,6 +147,30 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
           EVENTS.CONNECTION_STATE_CHANGED,
           handleConnectionStateChange
         );
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (callConnection) {
+      function handleVideoTrackToggle(value) {
+        setIsRemoteVideoTrackAvailable(value);
+      }
+      callConnection.on(EVENTS.VIDEO_TRACK_TOGGLED, handleVideoTrackToggle);
+      return () => {
+        callConnection.off(EVENTS.VIDEO_TRACK_TOGGLED, handleVideoTrackToggle);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    if (callConnection) {
+      function handleAudioTrackToggle(value) {
+        setIsRemoteAudioTrackAvailable(value);
+      }
+      callConnection.on(EVENTS.AUDIO_TRACK_TOGGLED, handleAudioTrackToggle);
+      return () => {
+        callConnection.off(EVENTS.AUDIO_TRACK_TOGGLED, handleAudioTrackToggle);
       };
     }
   }, []);
@@ -159,23 +210,46 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
           id="remote-video-player"
           autoplay
           srcObject=${remoteStream}
-        >
-          Video not present
-        </video>`
+          controls=${false}
+        ></video>`
       : html`<${Thumbnail} status=${connectionStatus} />`;
+  }, [
+    connectionStatus,
+    isRemoteVideoTrackAvailable,
+    remoteVideoRef,
+    remoteStream,
+  ]);
+
+  const localVideoPlayer = useMemo(() => {
+    return !isVideoMuted
+      ? html`<div style=${LOCAL_VIDEO_CONTAINER_STYLE}>
+          <video
+            ref=${localVideoRef}
+            id="local-video-player"
+            autoplay
+            muted
+            style=${LOCAL_VIDEO_STYLE}
+            controls=${false}
+            srcObject=${localStream}
+          ></video>
+        </div>`
+      : null;
+  });
+
+  const overlay = useMemo(() => {
+    if (connectionStatus === CONNECTION_STATES.connected.key) {
+      return html`<div style=${THUMBNAIL_OVERLAY_CONTAINER_STYLE}>
+        ${!isRemoteAudioTrackAvailable ? html` <${MicMute} />` : null}
+        ${!isRemoteVideoTrackAvailable ? html` <${VideoMute} />` : null}
+      </div>`;
+    }
   });
 
   return html`<div style=${PAGE_STYLE}>
     <div style=${VIDEO_CONTAINER_STYLE}>
+      ${overlay}
       <div style=${REMOTE_VIDEO_CONTAINER_STYLE}>${remoteVideoPlayer}</div>
-      <video
-        ref=${localVideoRef}
-        height="25%"
-        id="local-video-player"
-        autoplay
-        muted
-        style=${LOCAL_VIDEO_STYLE}
-      ></video>
+      ${localVideoPlayer}
     </div>
     <div style=${BOTTOM_BAR_STYLE}>
       <div style=${ACTIONS_STYLE}>

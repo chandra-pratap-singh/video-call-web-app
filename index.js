@@ -66,4 +66,12 @@ io.on("connection", (socket) => {
     socket.emit("end:call");
     socket.to(roomId).emit("end:call");
   });
+
+  socket.on("video:track:toggle", (roomId, value) => {
+    socket.to(roomId).emit("video:track:toggle", value);
+  });
+
+  socket.on("audio:track:toggle", (roomId, value) => {
+    socket.to(roomId).emit("audio:track:toggle", value);
+  });
 });
