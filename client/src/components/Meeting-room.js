@@ -1,8 +1,13 @@
 import html from "../libraries/rendering-library";
-import { useRef, useEffect, useState, useMemo } from "preact/hooks";
+import {
+  useRef,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+} from "preact/hooks";
 import { EVENTS } from "../../constants";
 import { IconButton } from "./IconButton";
-import { AddParticipants } from "../icons/add_participants";
 import { Mic } from "../icons/mic";
 import { Video } from "../icons/video";
 import { CallEnd } from "../icons/call_end";
@@ -11,6 +16,8 @@ import { VideoMute } from "../icons/video_mute";
 import { getCallConnection } from "../utils/get-call-connection";
 import { CONNECTION_STATES, pages } from "../constants";
 import { Thumbnail } from "./Thumbnail";
+import { ShareScreenIcon } from "../icons/share_screen";
+import { ShareScreenMuteIcon } from "../icons/share_screen_mute";
 
 const PAGE_STYLE = {
   height: "100vh",
@@ -85,21 +92,26 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
   );
 
   const [isRemoteVideoTrackAvailable, setIsRemoteVideoTrackAvailable] =
-    useState(false);
+    useState(true);
   const [isRemoteAudioTrackAvailable, setIsRemoteAudioTrackAvailable] =
+    useState(true);
+  const [isRemoteScreenTrackAvailable, setIsRemoteScreenTrackAvailable] =
     useState(false);
 
   const [remoteStream, setRemoteStream] = useState();
   const [localStream, setLocalStream] = useState();
+  const [isSharingScreen, setIsSharingScreen] = useState(false);
+
+  const startLocalVideo = () => {
+    const localStream = callConnection.getLocalStream();
+    setLocalStream(localStream);
+  };
 
   useEffect(() => {
     if (callConnection) {
       function displayRemoteVideo() {
         const remoteStream = callConnection.getRemoteStream();
-        // remoteVideoRef.current.srcObject = remoteStream;
         setRemoteStream(remoteStream);
-        setIsRemoteVideoTrackAvailable(true);
-        setIsRemoteAudioTrackAvailable(true);
       }
       callConnection.on(EVENTS.RECEIVED_REMOTE_STREAM, displayRemoteVideo);
       return () => {
@@ -112,9 +124,7 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
     if (callConnection) {
       try {
         await callConnection.startVideo();
-        const localStream = callConnection.getLocalStream();
-        // localVideoRef.current.srcObject = localStream;
-        setLocalStream(localStream);
+        startLocalVideo();
       } catch (err) {
         console.error("Error: ", err);
       }
@@ -131,7 +141,7 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
         callConnection.off(EVENTS.CONNECTION_TERMINATED, handleCallEnded);
       };
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (callConnection) {
@@ -175,6 +185,21 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (callConnection) {
+      function handleScreenTrackToggle(value) {
+        setIsRemoteScreenTrackAvailable(value);
+      }
+      callConnection.on(EVENTS.SCREEN_SHARING_TOGGLED, handleScreenTrackToggle);
+      return () => {
+        callConnection.off(
+          EVENTS.SCREEN_SHARING_TOGGLED,
+          handleScreenTrackToggle
+        );
+      };
+    }
+  }, []);
+
   const toggleAudioMute = () => {
     if (isAudioMuted) {
       callConnection.unMuteAudio();
@@ -195,7 +220,25 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
     }
   };
 
-  const handleAddParticipant = () => {};
+  const handleToggleShareScreen = useCallback(async () => {
+    if (isSharingScreen) {
+      callConnection.stopSharingScreen();
+      setIsSharingScreen(false);
+      await callConnection.startVideo();
+      startLocalVideo();
+      if (isVideoMuted) {
+        callConnection.muteVideo();
+        setIsVideoMuted(true);
+      }
+      if (isAudioMuted) {
+        callConnection.muteAudio();
+        setIsAudioMuted(true);
+      }
+    } else {
+      callConnection.shareScreen();
+      setIsSharingScreen(true);
+    }
+  });
 
   const handleEndCall = () => {
     callConnection.endCall();
@@ -204,24 +247,26 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
 
   const remoteVideoPlayer = useMemo(() => {
     return connectionStatus === CONNECTION_STATES.connected.key
-      ? html`<video
-          ref=${remoteVideoRef}
-          height="100%"
-          id="remote-video-player"
-          autoplay
-          srcObject=${remoteStream}
-          controls=${false}
-        ></video>`
+      ? (isRemoteVideoTrackAvailable || isRemoteScreenTrackAvailable) &&
+          html`<video
+            ref=${remoteVideoRef}
+            height="100%"
+            id="remote-video-player"
+            autoplay
+            srcObject=${remoteStream}
+            controls=${false}
+          ></video>`
       : html`<${Thumbnail} status=${connectionStatus} />`;
   }, [
     connectionStatus,
     isRemoteVideoTrackAvailable,
     remoteVideoRef,
     remoteStream,
+    isRemoteScreenTrackAvailable,
   ]);
 
   const localVideoPlayer = useMemo(() => {
-    return !isVideoMuted
+    return !isVideoMuted && !isSharingScreen
       ? html`<div style=${LOCAL_VIDEO_CONTAINER_STYLE}>
           <video
             ref=${localVideoRef}
@@ -254,8 +299,8 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
     <div style=${BOTTOM_BAR_STYLE}>
       <div style=${ACTIONS_STYLE}>
         <${IconButton}
-          icon=${AddParticipants}
-          onclick=${handleAddParticipant}
+          icon=${isSharingScreen ? ShareScreenIcon : ShareScreenMuteIcon}
+          onclick=${handleToggleShareScreen}
         />
         <${IconButton}
           icon=${isAudioMuted ? MicMute : Mic}

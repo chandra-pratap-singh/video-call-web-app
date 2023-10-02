@@ -7,4 +7,5 @@ export const EVENTS = {
   CONNECTION_STEPS_COMPLETED: "connection:steps:completed",
   VIDEO_TRACK_TOGGLED: "video:track:toggle",
   AUDIO_TRACK_TOGGLED: "audio:track:toggle",
+  SCREEN_SHARING_TOGGLED: "screen:sharing:toggled",
 };

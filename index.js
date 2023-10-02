@@ -74,4 +74,8 @@ io.on("connection", (socket) => {
   socket.on("audio:track:toggle", (roomId, value) => {
     socket.to(roomId).emit("audio:track:toggle", value);
   });
+
+  socket.on("screen:sharing:toggled", (roomId, value) => {
+    socket.to(roomId).emit("screen:sharing:toggled", value);
+  });
 });

@@ -10,6 +10,7 @@ class CallConnection {
     [EVENTS.CONNECTION_STEPS_COMPLETED]: [],
     [EVENTS.VIDEO_TRACK_TOGGLED]: [],
     [EVENTS.AUDIO_TRACK_TOGGLED]: [],
+    [EVENTS.SCREEN_SHARING_TOGGLED]: [],
   };
   roomId;
   peerConnection;
@@ -137,6 +138,10 @@ class CallConnection {
     this.socket.on("audio:track:toggle", (value) => {
       this._executeEvenListereners(EVENTS.AUDIO_TRACK_TOGGLED, value);
     });
+
+    this.socket.on("screen:sharing:toggled", (value) => {
+      this._executeEvenListereners(EVENTS.SCREEN_SHARING_TOGGLED, value);
+    });
   }
 
   constructor(peerConnection, socket, logger, roomId) {
@@ -184,35 +189,54 @@ class CallConnection {
   }
 
   _setAudio(value) {
-    const audioSender = this.peerConnection
-      .getSenders()
-      .find((sender) => sender.track.kind === "audio");
-    if (audioSender) {
-      audioSender.track.enabled = !!value;
-      this.socket.emit("audio:track:toggle", this.roomId, !!value);
-    }
+    this.localStream.getAudioTracks().forEach((track) => {
+      track.enabled = !!value;
+    });
+    this.socket.emit("audio:track:toggle", this.roomId, !!value);
   }
 
   _setVideo(value) {
-    const videoSender = this.peerConnection
-      .getSenders()
-      .find((sender) => sender.track.kind === "video");
-    if (videoSender) {
-      videoSender.track.enabled = value;
-      this.socket.emit("video:track:toggle", this.roomId, !!value);
-    }
+    this.localStream.getVideoTracks().forEach((track) => {
+      track.enabled = !!value;
+    });
+    this.socket.emit("video:track:toggle", this.roomId, !!value);
   }
 
-  async _shareStream() {
+  async _shareStream(video = true, audio = true) {
     const ls = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
+      video,
+      audio,
     });
     this.localStream = ls;
 
     this.localStream.getTracks().forEach((track) => {
       this.peerConnection.addTrack(track, this.localStream);
     });
+  }
+
+  async shareScreen() {
+    const ss = await navigator.mediaDevices.getDisplayMedia({
+      video: {
+        cursor: "always",
+        displaySurface: "monitor",
+      },
+    });
+    if (ss) {
+      this.screenStream = ss;
+      this.shareScreenSender = [];
+      this.screenStream.getTracks().forEach((track) => {
+        const sender = this.peerConnection.addTrack(track, this.screenStream);
+        this.shareScreenSender.push(sender);
+      });
+      this.socket.emit("screen:sharing:toggled", this.roomId, true);
+    }
+  }
+
+  stopSharingScreen() {
+    this.screenStream?.getTracks().forEach((track) => {
+      track.stop();
+    });
+    this.socket.emit("screen:sharing:toggled", this.roomId, false);
   }
 
   getRoomId() {
@@ -248,7 +272,7 @@ class CallConnection {
   }
 
   async startVideo() {
-    await this._shareStream();
+    await this._shareStream(true, true);
   }
 
   on(event, callBack) {
