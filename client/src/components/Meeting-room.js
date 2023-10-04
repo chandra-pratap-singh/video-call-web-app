@@ -21,6 +21,7 @@ import { ShareScreenMuteIcon } from "../icons/share_screen_mute";
 
 const PAGE_STYLE = {
   height: "100vh",
+  width: "100vw",
   display: "flex",
   flexDirection: "column",
   padding: "0px",
@@ -29,13 +30,13 @@ const PAGE_STYLE = {
 };
 
 const VIDEO_CONTAINER_STYLE = {
-  flex: "1",
   position: "relative",
+  height: "92%",
 };
 
 const BOTTOM_BAR_STYLE = {
   backgroundColor: "#3C3C3C",
-  height: "8vh",
+  height: "8%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
@@ -43,22 +44,26 @@ const BOTTOM_BAR_STYLE = {
 
 const ACTIONS_STYLE = {
   display: "flex",
-  gap: "64px",
+  justifyContent: "space-between",
+  width: "320px",
 };
 
 const REMOTE_VIDEO_CONTAINER_STYLE = {
   display: "flex",
   justifyContent: "center",
   height: "100%",
+  maxWidth: "100%",
+  alignItems: "center",
 };
 
 const LOCAL_VIDEO_CONTAINER_STYLE = {
   position: "absolute",
-  right: "16px",
-  bottom: "16px",
+  right: "1%",
+  bottom: "1%",
   border: "2px solid white",
   borderRadius: "8px",
   height: "25%",
+  maxWidth: "25%",
 };
 
 const THUMBNAIL_OVERLAY_CONTAINER_STYLE = {
@@ -272,11 +277,11 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
       ? (isRemoteVideoTrackAvailable || isRemoteScreenTrackAvailable) &&
           html`<video
             ref=${remoteVideoRef}
-            height="100%"
             id="remote-video-player"
             autoplay
             srcObject=${remoteStream}
             controls=${false}
+            style=${LOCAL_VIDEO_STYLE}
           ></video>`
       : html`<${Thumbnail} status=${connectionStatus} />`;
   }, [

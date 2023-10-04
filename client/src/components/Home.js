@@ -16,7 +16,7 @@ const PAGE_STYLE = {
 
 const CONTAINER_STYLE = {
   border: `2px solid ${BORDER_BG_COLOR}`,
-  padding: "32px",
+  padding: "2%",
   borderRadius: "4px",
 };
 
@@ -40,6 +40,7 @@ const ROOM_INPUT_STYLE = {
   backgroundColor: "#F3F3F3",
   border: "0px",
   fontSize: "1rem",
+  // width: "80%",
   width: "320px",
   padding: "6px",
 };
