@@ -8,4 +8,5 @@ export const EVENTS = {
   VIDEO_TRACK_TOGGLED: "video:track:toggle",
   AUDIO_TRACK_TOGGLED: "audio:track:toggle",
   SCREEN_SHARING_TOGGLED: "screen:sharing:toggled",
+  SCREEN_SHARING_INACTIVE: "screen:sharing:inactive",
 };

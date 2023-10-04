@@ -220,25 +220,47 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
     }
   };
 
-  const handleToggleShareScreen = useCallback(async () => {
-    if (isSharingScreen) {
-      callConnection.stopSharingScreen();
-      setIsSharingScreen(false);
-      await callConnection.startVideo();
-      startLocalVideo();
-      if (isVideoMuted) {
-        callConnection.muteVideo();
-        setIsVideoMuted(true);
-      }
-      if (isAudioMuted) {
-        callConnection.muteAudio();
-        setIsAudioMuted(true);
-      }
-    } else {
-      callConnection.shareScreen();
-      setIsSharingScreen(true);
+  const cleanUpAfterStopSharingScreen = useCallback(async () => {
+    setIsSharingScreen(false);
+    await callConnection.startVideo();
+    startLocalVideo();
+    if (isVideoMuted) {
+      callConnection.muteVideo();
+      setIsVideoMuted(true);
+    }
+    if (isAudioMuted) {
+      callConnection.muteAudio();
+      setIsAudioMuted(true);
     }
   });
+
+  const handleToggleShareScreen = useCallback(async () => {
+    if (isSharingScreen) {
+      await callConnection.stopSharingScreen();
+      await cleanUpAfterStopSharingScreen();
+    } else {
+      await callConnection.shareScreen();
+      setIsSharingScreen(true);
+    }
+  }, [cleanUpAfterStopSharingScreen]);
+
+  useEffect(() => {
+    if (callConnection) {
+      function handleStopScreenSharingCleanup() {
+        cleanUpAfterStopSharingScreen();
+      }
+      callConnection.on(
+        EVENTS.SCREEN_SHARING_INACTIVE,
+        handleStopScreenSharingCleanup
+      );
+      return () => {
+        callConnection.off(
+          EVENTS.SCREEN_SHARING_INACTIVE,
+          handleStopScreenSharingCleanup
+        );
+      };
+    }
+  }, [cleanUpAfterStopSharingScreen]);
 
   const handleEndCall = () => {
     callConnection.endCall();

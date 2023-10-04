@@ -11,6 +11,7 @@ class CallConnection {
     [EVENTS.VIDEO_TRACK_TOGGLED]: [],
     [EVENTS.AUDIO_TRACK_TOGGLED]: [],
     [EVENTS.SCREEN_SHARING_TOGGLED]: [],
+    [EVENTS.SCREEN_SHARING_INACTIVE]: [],
   };
   roomId;
   peerConnection;
@@ -223,10 +224,12 @@ class CallConnection {
     });
     if (ss) {
       this.screenStream = ss;
-      this.shareScreenSender = [];
       this.screenStream.getTracks().forEach((track) => {
-        const sender = this.peerConnection.addTrack(track, this.screenStream);
-        this.shareScreenSender.push(sender);
+        this.peerConnection.addTrack(track, this.screenStream);
+        track.addEventListener("ended", () => {
+          this._executeEvenListereners(EVENTS.SCREEN_SHARING_INACTIVE);
+          this.socket.emit("screen:sharing:toggled", this.roomId, false);
+        });
       });
       this.socket.emit("screen:sharing:toggled", this.roomId, true);
     }
