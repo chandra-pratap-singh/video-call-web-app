@@ -1,0 +1,109 @@
+.d-flex {
+  display: flex;
+}
+
+.full-page-container {
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.flex-centered {
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-align-items-stretch {
+  align-items: stretch;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.border-l-gray {
+  border: 2px solid #cccccc;
+}
+
+.border-gray {
+  border: 1px solid #cccccc;
+}
+
+.border-xs-gray {
+  border: 0.5px solid #cccccc;
+}
+
+.border-0 {
+  border: 0px;
+}
+
+.border-radius-xs {
+  border-radius: 2px;
+}
+
+.border-radius-s {
+  border-radius: 4px;
+}
+
+input {
+  height: 40px;
+  background-color: #f3f3f3;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+button {
+  height: 40px;
+  font-size: 1rem;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 2px;
+  background-color: #d9d9d9;
+}
+
+.button-primary {
+  background-color: #3a7dff;
+  color: white;
+  border: 0px;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.2 rem;
+  padding: 16px;
+}
+
+.p-xs {
+  padding: 2px;
+}
+
+.p-s {
+  padding: 4px;
+}
+
+.p-l {
+  padding: 8px;
+}
+
+.p-xl {
+  padding: 16px;
+}
+
+.p-xxl {
+  padding: 32px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-75 {
+  width: 75%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.w-25 {
+  width: 25%;
+}
