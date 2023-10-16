@@ -19,70 +19,6 @@ import { Thumbnail } from "./Thumbnail";
 import { ShareScreenIcon } from "../icons/share_screen";
 import { ShareScreenMuteIcon } from "../icons/share_screen_mute";
 
-const PAGE_STYLE = {
-  height: "100vh",
-  width: "100vw",
-  display: "flex",
-  flexDirection: "column",
-  padding: "0px",
-  margin: "0px",
-  backgroundColor: "#333333",
-};
-
-const VIDEO_CONTAINER_STYLE = {
-  position: "relative",
-  height: "92%",
-};
-
-const BOTTOM_BAR_STYLE = {
-  backgroundColor: "#3C3C3C",
-  height: "8%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const ACTIONS_STYLE = {
-  display: "flex",
-  justifyContent: "space-between",
-  width: "320px",
-};
-
-const REMOTE_VIDEO_CONTAINER_STYLE = {
-  display: "flex",
-  justifyContent: "center",
-  height: "100%",
-  maxWidth: "100%",
-  alignItems: "center",
-};
-
-const LOCAL_VIDEO_CONTAINER_STYLE = {
-  position: "absolute",
-  right: "1%",
-  bottom: "1%",
-  border: "2px solid white",
-  borderRadius: "8px",
-  height: "25%",
-  maxWidth: "25%",
-};
-
-const THUMBNAIL_OVERLAY_CONTAINER_STYLE = {
-  position: "absolute",
-  right: "0px",
-  left: "0px",
-  top: "0px",
-  bottom: "0px",
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-};
-
-const LOCAL_VIDEO_STYLE = {
-  height: "100%",
-  width: "100%",
-};
-
 export const MeetingRoom = ({ roomId, redirectToPage }) => {
   const callConnection = useMemo(() => {
     if (roomId) return getCallConnection(roomId);
@@ -281,7 +217,7 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
             autoplay
             srcObject=${remoteStream}
             controls=${false}
-            style=${LOCAL_VIDEO_STYLE}
+            class="h-100 max-w-100"
           ></video>`
       : html`<${Thumbnail} status=${connectionStatus} />`;
   }, [
@@ -294,15 +230,17 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
 
   const localVideoPlayer = useMemo(() => {
     return !isVideoMuted && !isSharingScreen
-      ? html`<div style=${LOCAL_VIDEO_CONTAINER_STYLE}>
+      ? html`<div
+          class="position-absolute position-bottom-right h-25 max-w-100"
+        >
           <video
             ref=${localVideoRef}
             id="local-video-player"
             autoplay
             muted
-            style=${LOCAL_VIDEO_STYLE}
             controls=${false}
             srcObject=${localStream}
+            class="h-100 border-radius-l border-l-white"
           ></video>
         </div>`
       : null;
@@ -310,21 +248,27 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
 
   const overlay = useMemo(() => {
     if (connectionStatus === CONNECTION_STATES.connected.key) {
-      return html`<div style=${THUMBNAIL_OVERLAY_CONTAINER_STYLE}>
+      return html`<div
+        class="position-absolute position-full-screen h-100 d-flex flex-centered"
+      >
         ${!isRemoteAudioTrackAvailable ? html` <${MicMute} />` : null}
         ${!isRemoteVideoTrackAvailable ? html` <${VideoMute} />` : null}
       </div>`;
     }
   });
 
-  return html`<div style=${PAGE_STYLE}>
-    <div style=${VIDEO_CONTAINER_STYLE}>
+  return html`<div
+    class="full-page-container h-100 d-flex flex-direction-column background-dark"
+  >
+    <div class="position-relative flex-1">
       ${overlay}
-      <div style=${REMOTE_VIDEO_CONTAINER_STYLE}>${remoteVideoPlayer}</div>
+      <div class="d-flex flex-centered h-100 max-w-100">
+        ${remoteVideoPlayer}
+      </div>
       ${localVideoPlayer}
     </div>
-    <div style=${BOTTOM_BAR_STYLE}>
-      <div style=${ACTIONS_STYLE}>
+    <div class="background-gray d-flex flex-centered p-l">
+      <div class="d-flex flex-justify-content-space-between w-50 m-w-100">
         <${IconButton}
           icon=${isSharingScreen ? ShareScreenIcon : ShareScreenMuteIcon}
           onclick=${handleToggleShareScreen}

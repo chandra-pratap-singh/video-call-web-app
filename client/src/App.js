@@ -3,6 +3,11 @@ import { useState, useMemo } from "preact/hooks";
 import { Home } from "./components/Home";
 import { Invitation } from "./components/Invitation";
 import { pages } from "./constants";
+// const {
+//   MeetingRoom,
+// } = () => {
+//   return import("./components/Meeting-room");
+//   };
 import { MeetingRoom } from "./components/Meeting-room";
 import { getRoomId } from "./utils/utils";
 import { CallEnded } from "./components/CallEnded";
