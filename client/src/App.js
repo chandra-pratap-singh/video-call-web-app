@@ -3,14 +3,10 @@ import { useState, useMemo } from "preact/hooks";
 import { Home } from "./components/Home";
 import { Invitation } from "./components/Invitation";
 import { pages } from "./constants";
-// const {
-//   MeetingRoom,
-// } = () => {
-//   return import("./components/Meeting-room");
-//   };
-import { MeetingRoom } from "./components/Meeting-room";
+import { lazy } from "./utils/lazy";
 import { getRoomId } from "./utils/utils";
 import { CallEnded } from "./components/CallEnded";
+const MeetingRoom = lazy(() => import("./components/Meeting-room.js"));
 
 export const App = () => {
   const existingRoomIdFromUrl = getRoomId();
@@ -38,7 +34,7 @@ export const App = () => {
         return html`<${MeetingRoom}
           roomId=${roomId}
           redirectToPage=${setActivePage}
-        />`;
+        /> `;
       case pages.callEnded.pageId:
         return html`<${CallEnded} />`;
     }

@@ -19,7 +19,7 @@ import { Thumbnail } from "./Thumbnail";
 import { ShareScreenIcon } from "../icons/share_screen";
 import { ShareScreenMuteIcon } from "../icons/share_screen_mute";
 
-export const MeetingRoom = ({ roomId, redirectToPage }) => {
+const MeetingRoom = ({ roomId, redirectToPage }) => {
   const callConnection = useMemo(() => {
     if (roomId) return getCallConnection(roomId);
   }, [roomId]);
@@ -249,7 +249,7 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
   const overlay = useMemo(() => {
     if (connectionStatus === CONNECTION_STATES.connected.key) {
       return html`<div
-        class="position-absolute position-full-screen h-100 d-flex flex-centered"
+        class="position-absolute position-full-screen h-100 d-flex flex-centered 1"
       >
         ${!isRemoteAudioTrackAvailable ? html` <${MicMute} />` : null}
         ${!isRemoteVideoTrackAvailable ? html` <${VideoMute} />` : null}
@@ -286,3 +286,5 @@ export const MeetingRoom = ({ roomId, redirectToPage }) => {
     </div>
   </div>`;
 };
+
+export default MeetingRoom;
