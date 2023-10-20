@@ -176,14 +176,12 @@ button {
 
 .text-label {
   font-size: 0.8rem;
-  color: #595959;
 }
 
 .info-box {
   background-color: #f3f3f3;
   padding: 12px;
   margin: 16px;
-  color: #404040;
 }
 
 .background-dark {
@@ -192,6 +190,10 @@ button {
 
 .background-gray {
   background-color: #3c3c3c;
+}
+
+.background-success {
+  background-color: #ccffcc;
 }
 
 .position-relative {
@@ -230,6 +232,6 @@ button {
   }
 
   .m-p-s {
-    padding: 4px;
+    padding: 6px;
   }
 }

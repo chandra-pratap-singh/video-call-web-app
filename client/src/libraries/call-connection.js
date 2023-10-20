@@ -224,7 +224,15 @@ class CallConnection {
     });
     if (ss) {
       this.screenStream = ss;
-      this.screenStream.getTracks().forEach((track) => {
+      const audioStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      const audioAndScreenStream = new MediaStream([
+        ...audioStream.getTracks(),
+        ...this.screenStream.getTracks(),
+      ]);
+      this.audioAndScreenStream = audioAndScreenStream;
+      audioAndScreenStream.getTracks().forEach((track) => {
         this.peerConnection.addTrack(track, this.screenStream);
         track.addEventListener("ended", () => {
           this._executeEvenListereners(EVENTS.SCREEN_SHARING_INACTIVE);

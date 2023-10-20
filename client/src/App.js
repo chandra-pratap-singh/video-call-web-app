@@ -7,6 +7,7 @@ import { lazy } from "./utils/lazy";
 import { getRoomId } from "./utils/utils";
 import { CallEnded } from "./components/CallEnded";
 const MeetingRoom = lazy(() => import("./components/Meeting-room.js"));
+import "./styles.css";
 
 export const App = () => {
   const existingRoomIdFromUrl = getRoomId();

@@ -1,462 +1,100 @@
-/*
- * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
-
-/***/ "./index.js":
-/*!******************!*\
-  !*** ./index.js ***!
-  \******************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! preact */ \"../node_modules/preact/dist/preact.module.js\");\n/* harmony import */ var _src_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./src/libraries/rendering-library */ \"./src/libraries/rendering-library.js\");\n/* harmony import */ var _src_App__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./src/App */ \"./src/App.js\");\n\n\n\n\n(0,preact__WEBPACK_IMPORTED_MODULE_0__.render)((0,_src_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_1__[\"default\"])`<${_src_App__WEBPACK_IMPORTED_MODULE_2__.App} />`, document.getElementById(\"root\"));\n\n\n//# sourceURL=webpack://client/./index.js?");
-
-/***/ }),
-
-/***/ "./src/App.js":
-/*!********************!*\
-  !*** ./src/App.js ***!
-  \********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   App: () => (/* binding */ App)\n/* harmony export */ });\n/* harmony import */ var _libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libraries/rendering-library */ \"./src/libraries/rendering-library.js\");\n/* harmony import */ var preact_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! preact/hooks */ \"../node_modules/preact/hooks/dist/hooks.module.js\");\n/* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Home */ \"./src/components/Home.js\");\n/* harmony import */ var _components_Invitation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Invitation */ \"./src/components/Invitation.js\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./constants */ \"./src/constants.js\");\n/* harmony import */ var _utils_lazy__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./utils/lazy */ \"./src/utils/lazy.js\");\n/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./utils/utils */ \"./src/utils/utils.js\");\n/* harmony import */ var _components_CallEnded__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/CallEnded */ \"./src/components/CallEnded.js\");\n\n\n\n\n\n\n\n\nconst MeetingRoom = (0,_utils_lazy__WEBPACK_IMPORTED_MODULE_5__.lazy)(() => Promise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_socket_io-client_build_esm_index_js\"), __webpack_require__.e(\"src_components_Meeting-room_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./components/Meeting-room.js */ \"./src/components/Meeting-room.js\")));\n\nconst App = () => {\n  const existingRoomIdFromUrl = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_6__.getRoomId)();\n  const [roomId, setRoomId] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)(existingRoomIdFromUrl);\n  const [activePage, setActivePage] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)(\n    existingRoomIdFromUrl ? _constants__WEBPACK_IMPORTED_MODULE_4__.pages.meetingRoom.pageId : _constants__WEBPACK_IMPORTED_MODULE_4__.pages.home.pageId\n  );\n  const [invitationUrl, setInvitationUrl] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)();\n  const ActiveComponent = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useMemo)(() => {\n    switch (activePage) {\n      case _constants__WEBPACK_IMPORTED_MODULE_4__.pages.home.pageId:\n        return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__[\"default\"])`<${_components_Home__WEBPACK_IMPORTED_MODULE_2__.Home}\n          redirectToPage=${setActivePage}\n          roomId=${roomId}\n          setRoomId=${setRoomId}\n          setInvitationUrl=${setInvitationUrl}\n        />`;\n      case _constants__WEBPACK_IMPORTED_MODULE_4__.pages.invitation.pageId:\n        return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__[\"default\"])`<${_components_Invitation__WEBPACK_IMPORTED_MODULE_3__.Invitation}\n          invitationUrl=${invitationUrl}\n          redirectToPage=${setActivePage}\n          roomId=${roomId}\n        />`;\n      case _constants__WEBPACK_IMPORTED_MODULE_4__.pages.meetingRoom.pageId:\n        return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__[\"default\"])`<${MeetingRoom}\n          roomId=${roomId}\n          redirectToPage=${setActivePage}\n        /> `;\n      case _constants__WEBPACK_IMPORTED_MODULE_4__.pages.callEnded.pageId:\n        return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__[\"default\"])`<${_components_CallEnded__WEBPACK_IMPORTED_MODULE_7__.CallEnded} />`;\n    }\n  });\n  return ActiveComponent;\n};\n\n\n//# sourceURL=webpack://client/./src/App.js?");
-
-/***/ }),
-
-/***/ "./src/components/CallEnded.js":
-/*!*************************************!*\
-  !*** ./src/components/CallEnded.js ***!
-  \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   CallEnded: () => (/* binding */ CallEnded)\n/* harmony export */ });\n/* harmony import */ var _libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libraries/rendering-library */ \"./src/libraries/rendering-library.js\");\n\n\nconst CallEnded = () => {\n  const redirectToHomePage = () => {\n    location.assign(\"/\");\n  };\n  return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__[\"default\"])`<div class=\"d-flex full-page-container flex-centered\">\n    <div>\n      <p class=\"text-center\">Call Ended!</p>\n      <button onclick=\"${redirectToHomePage}\">Go to Home Page</button>\n    </div>\n  </div>`;\n};\n\n\n//# sourceURL=webpack://client/./src/components/CallEnded.js?");
-
-/***/ }),
-
-/***/ "./src/components/Home.js":
-/*!********************************!*\
-  !*** ./src/components/Home.js ***!
-  \********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Home: () => (/* binding */ Home)\n/* harmony export */ });\n/* harmony import */ var _libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libraries/rendering-library */ \"./src/libraries/rendering-library.js\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants */ \"./src/constants.js\");\n/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uuid */ \"../node_modules/uuid/dist/esm-browser/v4.js\");\n/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/utils */ \"./src/utils/utils.js\");\n\n\n\n\n\nconst Home = ({\n  roomId,\n  setRoomId,\n  redirectToPage,\n  setInvitationUrl,\n}) => {\n  const handleRoomIdChange = (e) => {\n    e.preventDefault;\n    const { value } = e.target;\n    setRoomId(value);\n  };\n\n  const startNewCall = () => {\n    const newRoomId = (0,uuid__WEBPACK_IMPORTED_MODULE_3__[\"default\"])();\n    const invitationUrl = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.getInvitationUrl)(newRoomId);\n    setInvitationUrl(invitationUrl);\n    setRoomId(newRoomId);\n    redirectToPage(_constants__WEBPACK_IMPORTED_MODULE_1__.pages.invitation.pageId);\n  };\n\n  const joinRoom = () => {\n    const invitationUrl = (0,_utils_utils__WEBPACK_IMPORTED_MODULE_2__.getInvitationUrl)(roomId);\n    location.assign(invitationUrl);\n  };\n\n  return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__[\"default\"])`<div class=\"d-flex full-page-container flex-centered\">\n    <div class=\"border-l-gray border-radius-s p-xxl w-25 m-w-100 m-m-l m-p-l\">\n      <div class=\"p-xl m-p-s\">\n        <div\n          class=\"d-flex flex-align-items-stretch border-xs-gray border-radius-s w-100\"\n        >\n          <input\n            value=${roomId}\n            onInput=${handleRoomIdChange}\n            class=\"border-0 flex-1\"\n            placeholder=\"Enter room Id\"\n          />\n          <button class=\"border-0\" onclick=\"${joinRoom}\">Join Room</button>\n        </div>\n      </div>\n      <div class=\"title text-center\">OR</div>\n      <div class=\"p-xl m-p-s\">\n        <button\n          onclick=${startNewCall}\n          class=\"button button-primary w-100 border-radius-s\"\n        >\n          Start New Meeting\n        </button>\n      </div>\n    </div>\n  </div>`;\n};\n\n\n//# sourceURL=webpack://client/./src/components/Home.js?");
-
-/***/ }),
-
-/***/ "./src/components/Invitation.js":
-/*!**************************************!*\
-  !*** ./src/components/Invitation.js ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Invitation: () => (/* binding */ Invitation)\n/* harmony export */ });\n/* harmony import */ var _icons_copy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../icons/copy */ \"./src/icons/copy.js\");\n/* harmony import */ var _libraries_rendering_library__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../libraries/rendering-library */ \"./src/libraries/rendering-library.js\");\n\n\n\nconst Invitation = ({ invitationUrl, roomId }) => {\n  const startCall = () => {\n    location.assign(invitationUrl);\n  };\n  const copyToClipboard = (text) => {\n    navigator.clipboard.writeText(text);\n  };\n  const copyInvitationUrl = () => {\n    copyToClipboard(invitationUrl);\n  };\n\n  const copyRoomId = () => {\n    copyToClipboard(roomId);\n  };\n  return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_1__[\"default\"])`<div class=\"d-flex full-page-container flex-centered\">\n    <div>\n      <h4 class=\"title text-center\">Share your call invite</h4>\n      <p class=\"text-light text-center\">\n        Share the invitation link or room ID with the individuals you wish to\n        connect with.\n      </p>\n      <div\n        class=\"info-box d-flex flex-justify-content-space-between flex-align-items-center flex-gap-xl\"\n      >\n        <div>\n          <div class=\"text-label\">Invitation Link</div>\n          <div>${invitationUrl}</div>\n        </div>\n        <div>\n          <button onclick=${copyInvitationUrl} class=\"border-0\">\n            <${_icons_copy__WEBPACK_IMPORTED_MODULE_0__.CopyIcon} />\n          </button>\n        </div>\n      </div>\n      <div\n        class=\"info-box d-flex flex-justify-content-space-between flex-align-items-center flex-gap-xl\"\n      >\n        <div>\n          <div class=\"text-label\">Room Id</div>\n          <div>${roomId}</div>\n        </div>\n        <div>\n          <button onclick=${copyRoomId} class=\"border-0\">\n            <${_icons_copy__WEBPACK_IMPORTED_MODULE_0__.CopyIcon} />\n          </button>\n        </div>\n      </div>\n      <div class=\"text-center\">\n        <button onclick=${startCall} class=\"button-primary\">Start Call</button>\n      </div>\n    </div>\n  </div>`;\n};\n\n\n//# sourceURL=webpack://client/./src/components/Invitation.js?");
-
-/***/ }),
-
-/***/ "./src/constants.js":
-/*!**************************!*\
-  !*** ./src/constants.js ***!
-  \**************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   CONNECTION_STATES: () => (/* binding */ CONNECTION_STATES),\n/* harmony export */   pages: () => (/* binding */ pages)\n/* harmony export */ });\nconst pages = {\n  home: {\n    pageId: \"home\",\n  },\n  invitation: {\n    pageId: \"invitation\",\n  },\n  meetingRoom: {\n    pageId: \"meetingRoom\",\n  },\n  callEnded: {\n    pageId: \"callEnded\",\n  },\n};\n\nconst CONNECTION_STATES = {\n  new: { key: \"new\", displayMessage: \"No Participant\" },\n  connecting: { key: \"connecting\", displayMessage: \"Connecting...\" },\n  connected: { key: \"connected\", displayMessage: \"Connected...\" },\n  disconnected: { key: \"disconnected\", displayMessage: \"Disconnected!\" },\n  failed: { key: \"failed\", displayMessage: \"Connection Failed!\" },\n  closed: { key: \"closed\", displayMessage: \"Connection Closed!\" },\n};\n\n\n//# sourceURL=webpack://client/./src/constants.js?");
-
-/***/ }),
-
-/***/ "./src/icons/copy.js":
-/*!***************************!*\
-  !*** ./src/icons/copy.js ***!
-  \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   CopyIcon: () => (/* binding */ CopyIcon)\n/* harmony export */ });\n/* harmony import */ var _libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../libraries/rendering-library */ \"./src/libraries/rendering-library.js\");\n\n\nconst CopyIcon = () => {\n  return (0,_libraries_rendering_library__WEBPACK_IMPORTED_MODULE_0__[\"default\"])`\n    <svg\n      width=\"24\"\n      height=\"24\"\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      xmlns=\"http://www.w3.org/2000/svg\"\n    >\n      <g clip-path=\"url(#clip0_620_4)\">\n        <path\n          d=\"M19 2C19.5304 2 20.0391 2.21071 20.4142 2.58579C20.7893 2.96086 21 3.46957 21 4V16C21 16.5304 20.7893 17.0391 20.4142 17.4142C20.0391 17.7893 19.5304 18 19 18H17V20C17 20.5304 16.7893 21.0391 16.4142 21.4142C16.0391 21.7893 15.5304 22 15 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V8C3 7.46957 3.21071 6.96086 3.58579 6.58579C3.96086 6.21071 4.46957 6 5 6H7V4C7 3.46957 7.21071 2.96086 7.58579 2.58579C7.96086 2.21071 8.46957 2 9 2H19ZM15 8H5V20H15V8ZM10 15C10.2652 15 10.5196 15.1054 10.7071 15.2929C10.8946 15.4804 11 15.7348 11 16C11 16.2652 10.8946 16.5196 10.7071 16.7071C10.5196 16.8946 10.2652 17 10 17H8C7.73478 17 7.48043 16.8946 7.29289 16.7071C7.10536 16.5196 7 16.2652 7 16C7 15.7348 7.10536 15.4804 7.29289 15.2929C7.48043 15.1054 7.73478 15 8 15H10ZM19 4H9V6H15C15.5304 6 16.0391 6.21071 16.4142 6.58579C16.7893 6.96086 17 7.46957 17 8V16H19V4ZM12 11C12.2549 11.0003 12.5 11.0979 12.6854 11.2728C12.8707 11.4478 12.9822 11.687 12.9972 11.9414C13.0121 12.1958 12.9293 12.4464 12.7657 12.6418C12.6021 12.8373 12.3701 12.9629 12.117 12.993L12 13H8C7.74512 12.9997 7.49997 12.9021 7.31463 12.7272C7.1293 12.5522 7.01777 12.313 7.00283 12.0586C6.98789 11.8042 7.07067 11.5536 7.23426 11.3582C7.39786 11.1627 7.6299 11.0371 7.883 11.007L8 11H12Z\"\n          fill=\"#545454\"\n        />\n      </g>\n      <defs>\n        <clipPath id=\"clip0_620_4\">\n          <rect width=\"24\" height=\"24\" fill=\"white\" />\n        </clipPath>\n      </defs>\n    </svg>\n  `;\n};\n\n\n//# sourceURL=webpack://client/./src/icons/copy.js?");
-
-/***/ }),
-
-/***/ "./src/libraries/rendering-library.js":
-/*!********************************************!*\
-  !*** ./src/libraries/rendering-library.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! preact */ \"../node_modules/preact/dist/preact.module.js\");\n/* harmony import */ var htm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! htm */ \"../node_modules/htm/dist/htm.module.js\");\n\n\nconst html = htm__WEBPACK_IMPORTED_MODULE_1__[\"default\"].bind(preact__WEBPACK_IMPORTED_MODULE_0__.h);\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (html);\n\n\n//# sourceURL=webpack://client/./src/libraries/rendering-library.js?");
-
-/***/ }),
-
-/***/ "./src/utils/lazy.js":
-/*!***************************!*\
-  !*** ./src/utils/lazy.js ***!
-  \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   lazy: () => (/* binding */ lazy)\n/* harmony export */ });\n/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! preact */ \"../node_modules/preact/dist/preact.module.js\");\n/* harmony import */ var preact_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! preact/hooks */ \"../node_modules/preact/hooks/dist/hooks.module.js\");\n\n\n\nconst lazy = (importFn) => {\n  function Lazy(props) {\n    const [Component, setComponent] = (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useState)(null);\n    (0,preact_hooks__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {\n      async function load() {\n        const loadedComponent = await importFn();\n        setComponent((0,preact__WEBPACK_IMPORTED_MODULE_0__.h)(loadedComponent.default, props));\n      }\n      load();\n    }, []);\n    return Component;\n  }\n  return Lazy;\n};\n\n\n//# sourceURL=webpack://client/./src/utils/lazy.js?");
-
-/***/ }),
-
-/***/ "./src/utils/utils.js":
-/*!****************************!*\
-  !*** ./src/utils/utils.js ***!
-  \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   getInvitationUrl: () => (/* binding */ getInvitationUrl),\n/* harmony export */   getRoomId: () => (/* binding */ getRoomId)\n/* harmony export */ });\nconst getRoomId = () => {\n  const queryString = window.location.search;\n  const queryParams = new URLSearchParams(queryString);\n  return queryParams.get(\"roomId\");\n};\n\nconst getInvitationUrl = (roomId) => {\n  const currentUrl = window.location.href;\n  const invitationUrl = `${currentUrl}?roomId=${roomId}`;\n  return invitationUrl;\n};\n\n\n//# sourceURL=webpack://client/./src/utils/utils.js?");
-
-/***/ }),
-
-/***/ "../node_modules/htm/dist/htm.module.js":
-/*!**********************************************!*\
-  !*** ../node_modules/htm/dist/htm.module.js ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nvar n=function(t,s,r,e){var u;s[0]=0;for(var h=1;h<s.length;h++){var p=s[h++],a=s[h]?(s[0]|=p?1:2,r[s[h++]]):s[++h];3===p?e[0]=a:4===p?e[1]=Object.assign(e[1]||{},a):5===p?(e[1]=e[1]||{})[s[++h]]=a:6===p?e[1][s[++h]]+=a+\"\":p?(u=t.apply(a,n(t,a,r,[\"\",null])),e.push(u),a[0]?s[0]|=2:(s[h-2]=0,s[h]=u)):e.push(a)}return e},t=new Map;/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(s){var r=t.get(this);return r||(r=new Map,t.set(this,r)),(r=n(this,r.get(s)||(r.set(s,r=function(n){for(var t,s,r=1,e=\"\",u=\"\",h=[0],p=function(n){1===r&&(n||(e=e.replace(/^\\s*\\n\\s*|\\s*\\n\\s*$/g,\"\")))?h.push(0,n,e):3===r&&(n||e)?(h.push(3,n,e),r=2):2===r&&\"...\"===e&&n?h.push(4,n,0):2===r&&e&&!n?h.push(5,0,!0,e):r>=5&&((e||!n&&5===r)&&(h.push(r,0,e,s),r=6),n&&(h.push(r,n,0,s),r=6)),e=\"\"},a=0;a<n.length;a++){a&&(1===r&&p(),p(a));for(var l=0;l<n[a].length;l++)t=n[a][l],1===r?\"<\"===t?(p(),h=[h],r=3):e+=t:4===r?\"--\"===e&&\">\"===t?(r=1,e=\"\"):e=t+e[0]:u?t===u?u=\"\":e+=t:'\"'===t||\"'\"===t?u=t:\">\"===t?(p(),r=1):r&&(\"=\"===t?(r=5,s=e,e=\"\"):\"/\"===t&&(r<5||\">\"===n[a][l+1])?(p(),3===r&&(h=h[0]),r=h,(h=h[0]).push(2,0,r),r=0):\" \"===t||\"\\t\"===t||\"\\n\"===t||\"\\r\"===t?(p(),r=2):e+=t),3===r&&\"!--\"===e&&(r=4,h=h[0])}return p(),h}(s)),r),arguments,[])).length>1?r:r[0]}\n\n\n//# sourceURL=webpack://client/../node_modules/htm/dist/htm.module.js?");
-
-/***/ }),
-
-/***/ "../node_modules/preact/dist/preact.module.js":
-/*!****************************************************!*\
-  !*** ../node_modules/preact/dist/preact.module.js ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   Component: () => (/* binding */ b),\n/* harmony export */   Fragment: () => (/* binding */ k),\n/* harmony export */   cloneElement: () => (/* binding */ F),\n/* harmony export */   createContext: () => (/* binding */ G),\n/* harmony export */   createElement: () => (/* binding */ y),\n/* harmony export */   createRef: () => (/* binding */ _),\n/* harmony export */   h: () => (/* binding */ y),\n/* harmony export */   hydrate: () => (/* binding */ E),\n/* harmony export */   isValidElement: () => (/* binding */ t),\n/* harmony export */   options: () => (/* binding */ l),\n/* harmony export */   render: () => (/* binding */ D),\n/* harmony export */   toChildArray: () => (/* binding */ C)\n/* harmony export */ });\nvar n,l,u,t,i,o,r,f,e,c={},s=[],a=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,h=Array.isArray;function v(n,l){for(var u in l)n[u]=l[u];return n}function p(n){var l=n.parentNode;l&&l.removeChild(n)}function y(l,u,t){var i,o,r,f={};for(r in u)\"key\"==r?i=u[r]:\"ref\"==r?o=u[r]:f[r]=u[r];if(arguments.length>2&&(f.children=arguments.length>3?n.call(arguments,2):t),\"function\"==typeof l&&null!=l.defaultProps)for(r in l.defaultProps)void 0===f[r]&&(f[r]=l.defaultProps[r]);return d(l,f,i,o,null)}function d(n,t,i,o,r){var f={type:n,props:t,key:i,ref:o,__k:null,__:null,__b:0,__e:null,__d:void 0,__c:null,__h:null,constructor:void 0,__v:null==r?++u:r};return null==r&&null!=l.vnode&&l.vnode(f),f}function _(){return{current:null}}function k(n){return n.children}function b(n,l){this.props=n,this.context=l}function g(n,l){if(null==l)return n.__?g(n.__,n.__.__k.indexOf(n)+1):null;for(var u;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e)return u.__e;return\"function\"==typeof n.type?g(n):null}function m(n){var l,u;if(null!=(n=n.__)&&null!=n.__c){for(n.__e=n.__c.base=null,l=0;l<n.__k.length;l++)if(null!=(u=n.__k[l])&&null!=u.__e){n.__e=n.__c.base=u.__e;break}return m(n)}}function w(n){(!n.__d&&(n.__d=!0)&&i.push(n)&&!x.__r++||o!==l.debounceRendering)&&((o=l.debounceRendering)||r)(x)}function x(){var n,l,u,t,o,r,e,c,s;for(i.sort(f);n=i.shift();)n.__d&&(l=i.length,t=void 0,o=void 0,r=void 0,c=(e=(u=n).__v).__e,(s=u.__P)&&(t=[],o=[],(r=v({},e)).__v=e.__v+1,L(s,e,r,u.__n,void 0!==s.ownerSVGElement,null!=e.__h?[c]:null,t,null==c?g(e):c,e.__h,o),M(t,e,o),e.__e!=c&&m(e)),i.length>l&&i.sort(f));x.__r=0}function P(n,l,u,t,i,o,r,f,e,a,v){var p,y,_,b,m,w,x,P,C,H=0,I=t&&t.__k||s,T=I.length,j=T,z=l.length;for(u.__k=[],p=0;p<z;p++)null!=(b=u.__k[p]=null==(b=l[p])||\"boolean\"==typeof b||\"function\"==typeof b?null:\"string\"==typeof b||\"number\"==typeof b||\"bigint\"==typeof b?d(null,b,null,null,b):h(b)?d(k,{children:b},null,null,null):b.__b>0?d(b.type,b.props,b.key,b.ref?b.ref:null,b.__v):b)?(b.__=u,b.__b=u.__b+1,-1===(P=A(b,I,x=p+H,j))?_=c:(_=I[P]||c,I[P]=void 0,j--),L(n,b,_,i,o,r,f,e,a,v),m=b.__e,(y=b.ref)&&_.ref!=y&&(_.ref&&O(_.ref,null,b),v.push(y,b.__c||m,b)),null!=m&&(null==w&&(w=m),(C=_===c||null===_.__v)?-1==P&&H--:P!==x&&(P===x+1?H++:P>x?j>z-x?H+=P-x:H--:H=P<x&&P==x-1?P-x:0),x=p+H,\"function\"!=typeof b.type||P===x&&_.__k!==b.__k?\"function\"==typeof b.type||P===x&&!C?void 0!==b.__d?(e=b.__d,b.__d=void 0):e=m.nextSibling:e=S(n,m,e):e=$(b,e,n),\"function\"==typeof u.type&&(u.__d=e))):(_=I[p])&&null==_.key&&_.__e&&(_.__e==e&&(e=g(_)),q(_,_,!1),I[p]=null);for(u.__e=w,p=T;p--;)null!=I[p]&&(\"function\"==typeof u.type&&null!=I[p].__e&&I[p].__e==u.__d&&(u.__d=I[p].__e.nextSibling),q(I[p],I[p]))}function $(n,l,u){for(var t,i=n.__k,o=0;i&&o<i.length;o++)(t=i[o])&&(t.__=n,l=\"function\"==typeof t.type?$(t,l,u):S(u,t.__e,l));return l}function C(n,l){return l=l||[],null==n||\"boolean\"==typeof n||(h(n)?n.some(function(n){C(n,l)}):l.push(n)),l}function S(n,l,u){return null==u||u.parentNode!==n?n.insertBefore(l,null):l==u&&null!=l.parentNode||n.insertBefore(l,u),l.nextSibling}function A(n,l,u,t){var i=n.key,o=n.type,r=u-1,f=u+1,e=l[u];if(null===e||e&&i==e.key&&o===e.type)return u;if(t>(null!=e?1:0))for(;r>=0||f<l.length;){if(r>=0){if((e=l[r])&&i==e.key&&o===e.type)return r;r--}if(f<l.length){if((e=l[f])&&i==e.key&&o===e.type)return f;f++}}return-1}function H(n,l,u,t,i){var o;for(o in u)\"children\"===o||\"key\"===o||o in l||T(n,o,null,u[o],t);for(o in l)i&&\"function\"!=typeof l[o]||\"children\"===o||\"key\"===o||\"value\"===o||\"checked\"===o||u[o]===l[o]||T(n,o,l[o],u[o],t)}function I(n,l,u){\"-\"===l[0]?n.setProperty(l,null==u?\"\":u):n[l]=null==u?\"\":\"number\"!=typeof u||a.test(l)?u:u+\"px\"}function T(n,l,u,t,i){var o;n:if(\"style\"===l)if(\"string\"==typeof u)n.style.cssText=u;else{if(\"string\"==typeof t&&(n.style.cssText=t=\"\"),t)for(l in t)u&&l in u||I(n.style,l,\"\");if(u)for(l in u)t&&u[l]===t[l]||I(n.style,l,u[l])}else if(\"o\"===l[0]&&\"n\"===l[1])o=l!==(l=l.replace(/(PointerCapture)$|Capture$/,\"$1\")),l=l.toLowerCase()in n?l.toLowerCase().slice(2):l.slice(2),n.l||(n.l={}),n.l[l+o]=u,u?t||n.addEventListener(l,o?z:j,o):n.removeEventListener(l,o?z:j,o);else if(\"dangerouslySetInnerHTML\"!==l){if(i)l=l.replace(/xlink(H|:h)/,\"h\").replace(/sName$/,\"s\");else if(\"width\"!==l&&\"height\"!==l&&\"href\"!==l&&\"list\"!==l&&\"form\"!==l&&\"tabIndex\"!==l&&\"download\"!==l&&\"rowSpan\"!==l&&\"colSpan\"!==l&&l in n)try{n[l]=null==u?\"\":u;break n}catch(n){}\"function\"==typeof u||(null==u||!1===u&&\"-\"!==l[4]?n.removeAttribute(l):n.setAttribute(l,u))}}function j(n){return this.l[n.type+!1](l.event?l.event(n):n)}function z(n){return this.l[n.type+!0](l.event?l.event(n):n)}function L(n,u,t,i,o,r,f,e,c,s){var a,p,y,d,_,g,m,w,x,$,C,S,A,H,I,T=u.type;if(void 0!==u.constructor)return null;null!=t.__h&&(c=t.__h,e=u.__e=t.__e,u.__h=null,r=[e]),(a=l.__b)&&a(u);n:if(\"function\"==typeof T)try{if(w=u.props,x=(a=T.contextType)&&i[a.__c],$=a?x?x.props.value:a.__:i,t.__c?m=(p=u.__c=t.__c).__=p.__E:(\"prototype\"in T&&T.prototype.render?u.__c=p=new T(w,$):(u.__c=p=new b(w,$),p.constructor=T,p.render=B),x&&x.sub(p),p.props=w,p.state||(p.state={}),p.context=$,p.__n=i,y=p.__d=!0,p.__h=[],p._sb=[]),null==p.__s&&(p.__s=p.state),null!=T.getDerivedStateFromProps&&(p.__s==p.state&&(p.__s=v({},p.__s)),v(p.__s,T.getDerivedStateFromProps(w,p.__s))),d=p.props,_=p.state,p.__v=u,y)null==T.getDerivedStateFromProps&&null!=p.componentWillMount&&p.componentWillMount(),null!=p.componentDidMount&&p.__h.push(p.componentDidMount);else{if(null==T.getDerivedStateFromProps&&w!==d&&null!=p.componentWillReceiveProps&&p.componentWillReceiveProps(w,$),!p.__e&&(null!=p.shouldComponentUpdate&&!1===p.shouldComponentUpdate(w,p.__s,$)||u.__v===t.__v)){for(u.__v!==t.__v&&(p.props=w,p.state=p.__s,p.__d=!1),u.__e=t.__e,u.__k=t.__k,u.__k.forEach(function(n){n&&(n.__=u)}),C=0;C<p._sb.length;C++)p.__h.push(p._sb[C]);p._sb=[],p.__h.length&&f.push(p);break n}null!=p.componentWillUpdate&&p.componentWillUpdate(w,p.__s,$),null!=p.componentDidUpdate&&p.__h.push(function(){p.componentDidUpdate(d,_,g)})}if(p.context=$,p.props=w,p.__P=n,p.__e=!1,S=l.__r,A=0,\"prototype\"in T&&T.prototype.render){for(p.state=p.__s,p.__d=!1,S&&S(u),a=p.render(p.props,p.state,p.context),H=0;H<p._sb.length;H++)p.__h.push(p._sb[H]);p._sb=[]}else do{p.__d=!1,S&&S(u),a=p.render(p.props,p.state,p.context),p.state=p.__s}while(p.__d&&++A<25);p.state=p.__s,null!=p.getChildContext&&(i=v(v({},i),p.getChildContext())),y||null==p.getSnapshotBeforeUpdate||(g=p.getSnapshotBeforeUpdate(d,_)),P(n,h(I=null!=a&&a.type===k&&null==a.key?a.props.children:a)?I:[I],u,t,i,o,r,f,e,c,s),p.base=u.__e,u.__h=null,p.__h.length&&f.push(p),m&&(p.__E=p.__=null)}catch(n){u.__v=null,(c||null!=r)&&(u.__e=e,u.__h=!!c,r[r.indexOf(e)]=null),l.__e(n,u,t)}else null==r&&u.__v===t.__v?(u.__k=t.__k,u.__e=t.__e):u.__e=N(t.__e,u,t,i,o,r,f,c,s);(a=l.diffed)&&a(u)}function M(n,u,t){for(var i=0;i<t.length;i++)O(t[i],t[++i],t[++i]);l.__c&&l.__c(u,n),n.some(function(u){try{n=u.__h,u.__h=[],n.some(function(n){n.call(u)})}catch(n){l.__e(n,u.__v)}})}function N(l,u,t,i,o,r,f,e,s){var a,v,y,d=t.props,_=u.props,k=u.type,b=0;if(\"svg\"===k&&(o=!0),null!=r)for(;b<r.length;b++)if((a=r[b])&&\"setAttribute\"in a==!!k&&(k?a.localName===k:3===a.nodeType)){l=a,r[b]=null;break}if(null==l){if(null===k)return document.createTextNode(_);l=o?document.createElementNS(\"http://www.w3.org/2000/svg\",k):document.createElement(k,_.is&&_),r=null,e=!1}if(null===k)d===_||e&&l.data===_||(l.data=_);else{if(r=r&&n.call(l.childNodes),v=(d=t.props||c).dangerouslySetInnerHTML,y=_.dangerouslySetInnerHTML,!e){if(null!=r)for(d={},b=0;b<l.attributes.length;b++)d[l.attributes[b].name]=l.attributes[b].value;(y||v)&&(y&&(v&&y.__html==v.__html||y.__html===l.innerHTML)||(l.innerHTML=y&&y.__html||\"\"))}if(H(l,_,d,o,e),y)u.__k=[];else if(P(l,h(b=u.props.children)?b:[b],u,t,i,o&&\"foreignObject\"!==k,r,f,r?r[0]:t.__k&&g(t,0),e,s),null!=r)for(b=r.length;b--;)null!=r[b]&&p(r[b]);e||(\"value\"in _&&void 0!==(b=_.value)&&(b!==l.value||\"progress\"===k&&!b||\"option\"===k&&b!==d.value)&&T(l,\"value\",b,d.value,!1),\"checked\"in _&&void 0!==(b=_.checked)&&b!==l.checked&&T(l,\"checked\",b,d.checked,!1))}return l}function O(n,u,t){try{\"function\"==typeof n?n(u):n.current=u}catch(n){l.__e(n,t)}}function q(n,u,t){var i,o;if(l.unmount&&l.unmount(n),(i=n.ref)&&(i.current&&i.current!==n.__e||O(i,null,u)),null!=(i=n.__c)){if(i.componentWillUnmount)try{i.componentWillUnmount()}catch(n){l.__e(n,u)}i.base=i.__P=null,n.__c=void 0}if(i=n.__k)for(o=0;o<i.length;o++)i[o]&&q(i[o],u,t||\"function\"!=typeof n.type);t||null==n.__e||p(n.__e),n.__=n.__e=n.__d=void 0}function B(n,l,u){return this.constructor(n,u)}function D(u,t,i){var o,r,f,e;l.__&&l.__(u,t),r=(o=\"function\"==typeof i)?null:i&&i.__k||t.__k,f=[],e=[],L(t,u=(!o&&i||t).__k=y(k,null,[u]),r||c,c,void 0!==t.ownerSVGElement,!o&&i?[i]:r?null:t.firstChild?n.call(t.childNodes):null,f,!o&&i?i:r?r.__e:t.firstChild,o,e),M(f,u,e)}function E(n,l){D(n,l,E)}function F(l,u,t){var i,o,r,f,e=v({},l.props);for(r in l.type&&l.type.defaultProps&&(f=l.type.defaultProps),u)\"key\"==r?i=u[r]:\"ref\"==r?o=u[r]:e[r]=void 0===u[r]&&void 0!==f?f[r]:u[r];return arguments.length>2&&(e.children=arguments.length>3?n.call(arguments,2):t),d(l.type,e,i||l.key,o||l.ref,null)}function G(n,l){var u={__c:l=\"__cC\"+e++,__:n,Consumer:function(n,l){return n.children(l)},Provider:function(n){var u,t;return this.getChildContext||(u=[],(t={})[l]=this,this.getChildContext=function(){return t},this.shouldComponentUpdate=function(n){this.props.value!==n.value&&u.some(function(n){n.__e=!0,w(n)})},this.sub=function(n){u.push(n);var l=n.componentWillUnmount;n.componentWillUnmount=function(){u.splice(u.indexOf(n),1),l&&l.call(n)}}),n.children}};return u.Provider.__=u.Consumer.contextType=u}n=s.slice,l={__e:function(n,l,u,t){for(var i,o,r;l=l.__;)if((i=l.__c)&&!i.__)try{if((o=i.constructor)&&null!=o.getDerivedStateFromError&&(i.setState(o.getDerivedStateFromError(n)),r=i.__d),null!=i.componentDidCatch&&(i.componentDidCatch(n,t||{}),r=i.__d),r)return i.__E=i}catch(l){n=l}throw n}},u=0,t=function(n){return null!=n&&void 0===n.constructor},b.prototype.setState=function(n,l){var u;u=null!=this.__s&&this.__s!==this.state?this.__s:this.__s=v({},this.state),\"function\"==typeof n&&(n=n(v({},u),this.props)),n&&v(u,n),null!=n&&this.__v&&(l&&this._sb.push(l),w(this))},b.prototype.forceUpdate=function(n){this.__v&&(this.__e=!0,n&&this.__h.push(n),w(this))},b.prototype.render=k,i=[],r=\"function\"==typeof Promise?Promise.prototype.then.bind(Promise.resolve()):setTimeout,f=function(n,l){return n.__v.__b-l.__v.__b},x.__r=0,e=0;\n//# sourceMappingURL=preact.module.js.map\n\n\n//# sourceURL=webpack://client/../node_modules/preact/dist/preact.module.js?");
-
-/***/ }),
-
-/***/ "../node_modules/preact/hooks/dist/hooks.module.js":
-/*!*********************************************************!*\
-  !*** ../node_modules/preact/hooks/dist/hooks.module.js ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   useCallback: () => (/* binding */ T),\n/* harmony export */   useContext: () => (/* binding */ q),\n/* harmony export */   useDebugValue: () => (/* binding */ x),\n/* harmony export */   useEffect: () => (/* binding */ p),\n/* harmony export */   useErrorBoundary: () => (/* binding */ P),\n/* harmony export */   useId: () => (/* binding */ V),\n/* harmony export */   useImperativeHandle: () => (/* binding */ A),\n/* harmony export */   useLayoutEffect: () => (/* binding */ y),\n/* harmony export */   useMemo: () => (/* binding */ F),\n/* harmony export */   useReducer: () => (/* binding */ s),\n/* harmony export */   useRef: () => (/* binding */ _),\n/* harmony export */   useState: () => (/* binding */ h)\n/* harmony export */ });\n/* harmony import */ var preact__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! preact */ \"../node_modules/preact/dist/preact.module.js\");\nvar t,r,u,i,o=0,f=[],c=[],e=preact__WEBPACK_IMPORTED_MODULE_0__.options.__b,a=preact__WEBPACK_IMPORTED_MODULE_0__.options.__r,v=preact__WEBPACK_IMPORTED_MODULE_0__.options.diffed,l=preact__WEBPACK_IMPORTED_MODULE_0__.options.__c,m=preact__WEBPACK_IMPORTED_MODULE_0__.options.unmount;function d(t,u){preact__WEBPACK_IMPORTED_MODULE_0__.options.__h&&preact__WEBPACK_IMPORTED_MODULE_0__.options.__h(r,t,o||u),o=0;var i=r.__H||(r.__H={__:[],__h:[]});return t>=i.__.length&&i.__.push({__V:c}),i.__[t]}function h(n){return o=1,s(B,n)}function s(n,u,i){var o=d(t++,2);if(o.t=n,!o.__c&&(o.__=[i?i(u):B(void 0,u),function(n){var t=o.__N?o.__N[0]:o.__[0],r=o.t(t,n);t!==r&&(o.__N=[r,o.__[1]],o.__c.setState({}))}],o.__c=r,!r.u)){var f=function(n,t,r){if(!o.__c.__H)return!0;var u=o.__c.__H.__.filter(function(n){return n.__c});if(u.every(function(n){return!n.__N}))return!c||c.call(this,n,t,r);var i=!1;return u.forEach(function(n){if(n.__N){var t=n.__[0];n.__=n.__N,n.__N=void 0,t!==n.__[0]&&(i=!0)}}),!(!i&&o.__c.props===n)&&(!c||c.call(this,n,t,r))};r.u=!0;var c=r.shouldComponentUpdate,e=r.componentWillUpdate;r.componentWillUpdate=function(n,t,r){if(this.__e){var u=c;c=void 0,f(n,t,r),c=u}e&&e.call(this,n,t,r)},r.shouldComponentUpdate=f}return o.__N||o.__}function p(u,i){var o=d(t++,3);!preact__WEBPACK_IMPORTED_MODULE_0__.options.__s&&z(o.__H,i)&&(o.__=u,o.i=i,r.__H.__h.push(o))}function y(u,i){var o=d(t++,4);!preact__WEBPACK_IMPORTED_MODULE_0__.options.__s&&z(o.__H,i)&&(o.__=u,o.i=i,r.__h.push(o))}function _(n){return o=5,F(function(){return{current:n}},[])}function A(n,t,r){o=6,y(function(){return\"function\"==typeof n?(n(t()),function(){return n(null)}):n?(n.current=t(),function(){return n.current=null}):void 0},null==r?r:r.concat(n))}function F(n,r){var u=d(t++,7);return z(u.__H,r)?(u.__V=n(),u.i=r,u.__h=n,u.__V):u.__}function T(n,t){return o=8,F(function(){return n},t)}function q(n){var u=r.context[n.__c],i=d(t++,9);return i.c=n,u?(null==i.__&&(i.__=!0,u.sub(r)),u.props.value):n.__}function x(t,r){preact__WEBPACK_IMPORTED_MODULE_0__.options.useDebugValue&&preact__WEBPACK_IMPORTED_MODULE_0__.options.useDebugValue(r?r(t):t)}function P(n){var u=d(t++,10),i=h();return u.__=n,r.componentDidCatch||(r.componentDidCatch=function(n,t){u.__&&u.__(n,t),i[1](n)}),[i[0],function(){i[1](void 0)}]}function V(){var n=d(t++,11);if(!n.__){for(var u=r.__v;null!==u&&!u.__m&&null!==u.__;)u=u.__;var i=u.__m||(u.__m=[0,0]);n.__=\"P\"+i[0]+\"-\"+i[1]++}return n.__}function b(){for(var t;t=f.shift();)if(t.__P&&t.__H)try{t.__H.__h.forEach(k),t.__H.__h.forEach(w),t.__H.__h=[]}catch(r){t.__H.__h=[],preact__WEBPACK_IMPORTED_MODULE_0__.options.__e(r,t.__v)}}preact__WEBPACK_IMPORTED_MODULE_0__.options.__b=function(n){r=null,e&&e(n)},preact__WEBPACK_IMPORTED_MODULE_0__.options.__r=function(n){a&&a(n),t=0;var i=(r=n.__c).__H;i&&(u===r?(i.__h=[],r.__h=[],i.__.forEach(function(n){n.__N&&(n.__=n.__N),n.__V=c,n.__N=n.i=void 0})):(i.__h.forEach(k),i.__h.forEach(w),i.__h=[],t=0)),u=r},preact__WEBPACK_IMPORTED_MODULE_0__.options.diffed=function(t){v&&v(t);var o=t.__c;o&&o.__H&&(o.__H.__h.length&&(1!==f.push(o)&&i===preact__WEBPACK_IMPORTED_MODULE_0__.options.requestAnimationFrame||((i=preact__WEBPACK_IMPORTED_MODULE_0__.options.requestAnimationFrame)||j)(b)),o.__H.__.forEach(function(n){n.i&&(n.__H=n.i),n.__V!==c&&(n.__=n.__V),n.i=void 0,n.__V=c})),u=r=null},preact__WEBPACK_IMPORTED_MODULE_0__.options.__c=function(t,r){r.some(function(t){try{t.__h.forEach(k),t.__h=t.__h.filter(function(n){return!n.__||w(n)})}catch(u){r.some(function(n){n.__h&&(n.__h=[])}),r=[],preact__WEBPACK_IMPORTED_MODULE_0__.options.__e(u,t.__v)}}),l&&l(t,r)},preact__WEBPACK_IMPORTED_MODULE_0__.options.unmount=function(t){m&&m(t);var r,u=t.__c;u&&u.__H&&(u.__H.__.forEach(function(n){try{k(n)}catch(n){r=n}}),u.__H=void 0,r&&preact__WEBPACK_IMPORTED_MODULE_0__.options.__e(r,u.__v))};var g=\"function\"==typeof requestAnimationFrame;function j(n){var t,r=function(){clearTimeout(u),g&&cancelAnimationFrame(t),setTimeout(n)},u=setTimeout(r,100);g&&(t=requestAnimationFrame(r))}function k(n){var t=r,u=n.__c;\"function\"==typeof u&&(n.__c=void 0,u()),r=t}function w(n){var t=r;n.__c=n.__(),r=t}function z(n,t){return!n||n.length!==t.length||t.some(function(t,r){return t!==n[r]})}function B(n,t){return\"function\"==typeof t?t(n):t}\n//# sourceMappingURL=hooks.module.js.map\n\n\n//# sourceURL=webpack://client/../node_modules/preact/hooks/dist/hooks.module.js?");
-
-/***/ }),
-
-/***/ "../node_modules/uuid/dist/esm-browser/native.js":
-/*!*******************************************************!*\
-  !*** ../node_modules/uuid/dist/esm-browser/native.js ***!
-  \*******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  randomUUID\n});\n\n//# sourceURL=webpack://client/../node_modules/uuid/dist/esm-browser/native.js?");
-
-/***/ }),
-
-/***/ "../node_modules/uuid/dist/esm-browser/regex.js":
-/*!******************************************************!*\
-  !*** ../node_modules/uuid/dist/esm-browser/regex.js ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);\n\n//# sourceURL=webpack://client/../node_modules/uuid/dist/esm-browser/regex.js?");
-
-/***/ }),
-
-/***/ "../node_modules/uuid/dist/esm-browser/rng.js":
-/*!****************************************************!*\
-  !*** ../node_modules/uuid/dist/esm-browser/rng.js ***!
-  \****************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ rng)\n/* harmony export */ });\n// Unique ID creation requires a high quality random # generator. In the browser we therefore\n// require the crypto API and do not support built-in fallback to lower quality random number\n// generators (like Math.random()).\nlet getRandomValues;\nconst rnds8 = new Uint8Array(16);\nfunction rng() {\n  // lazy load so that environments that need to polyfill have a chance to do so\n  if (!getRandomValues) {\n    // getRandomValues needs to be invoked in a context where \"this\" is a Crypto implementation.\n    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);\n\n    if (!getRandomValues) {\n      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');\n    }\n  }\n\n  return getRandomValues(rnds8);\n}\n\n//# sourceURL=webpack://client/../node_modules/uuid/dist/esm-browser/rng.js?");
-
-/***/ }),
-
-/***/ "../node_modules/uuid/dist/esm-browser/stringify.js":
-/*!**********************************************************!*\
-  !*** ../node_modules/uuid/dist/esm-browser/stringify.js ***!
-  \**********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__),\n/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)\n/* harmony export */ });\n/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ \"../node_modules/uuid/dist/esm-browser/validate.js\");\n\n/**\n * Convert array of 16 byte values to UUID string format of the form:\n * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX\n */\n\nconst byteToHex = [];\n\nfor (let i = 0; i < 256; ++i) {\n  byteToHex.push((i + 0x100).toString(16).slice(1));\n}\n\nfunction unsafeStringify(arr, offset = 0) {\n  // Note: Be careful editing this code!  It's been tuned for performance\n  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434\n  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();\n}\n\nfunction stringify(arr, offset = 0) {\n  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one\n  // of the following:\n  // - One or more input array values don't map to a hex octet (leading to\n  // \"undefined\" in the uuid)\n  // - Invalid input values for the RFC `version` or `variant` fields\n\n  if (!(0,_validate_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(uuid)) {\n    throw TypeError('Stringified UUID is invalid');\n  }\n\n  return uuid;\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (stringify);\n\n//# sourceURL=webpack://client/../node_modules/uuid/dist/esm-browser/stringify.js?");
-
-/***/ }),
-
-/***/ "../node_modules/uuid/dist/esm-browser/v4.js":
-/*!***************************************************!*\
-  !*** ../node_modules/uuid/dist/esm-browser/v4.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./native.js */ \"../node_modules/uuid/dist/esm-browser/native.js\");\n/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rng.js */ \"../node_modules/uuid/dist/esm-browser/rng.js\");\n/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringify.js */ \"../node_modules/uuid/dist/esm-browser/stringify.js\");\n\n\n\n\nfunction v4(options, buf, offset) {\n  if (_native_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"].randomUUID && !buf && !options) {\n    return _native_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"].randomUUID();\n  }\n\n  options = options || {};\n  const rnds = options.random || (options.rng || _rng_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`\n\n  rnds[6] = rnds[6] & 0x0f | 0x40;\n  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided\n\n  if (buf) {\n    offset = offset || 0;\n\n    for (let i = 0; i < 16; ++i) {\n      buf[offset + i] = rnds[i];\n    }\n\n    return buf;\n  }\n\n  return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_2__.unsafeStringify)(rnds);\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);\n\n//# sourceURL=webpack://client/../node_modules/uuid/dist/esm-browser/v4.js?");
-
-/***/ }),
-
-/***/ "../node_modules/uuid/dist/esm-browser/validate.js":
-/*!*********************************************************!*\
-  !*** ../node_modules/uuid/dist/esm-browser/validate.js ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ \"../node_modules/uuid/dist/esm-browser/regex.js\");\n\n\nfunction validate(uuid) {\n  return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"].test(uuid);\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);\n\n//# sourceURL=webpack://client/../node_modules/uuid/dist/esm-browser/validate.js?");
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/ensure chunk */
-/******/ 	(() => {
-/******/ 		__webpack_require__.f = {};
-/******/ 		// This file contains only the entry chunk.
-/******/ 		// The chunk loading function for additional chunks
-/******/ 		__webpack_require__.e = (chunkId) => {
-/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
-/******/ 				__webpack_require__.f[key](chunkId, promises);
-/******/ 				return promises;
-/******/ 			}, []));
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/get javascript chunk filename */
-/******/ 	(() => {
-/******/ 		// This function allow to reference async chunks
-/******/ 		__webpack_require__.u = (chunkId) => {
-/******/ 			// return url for filenames based on template
-/******/ 			return "" + chunkId + ".bundle.js";
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/global */
-/******/ 	(() => {
-/******/ 		__webpack_require__.g = (function() {
-/******/ 			if (typeof globalThis === 'object') return globalThis;
-/******/ 			try {
-/******/ 				return this || new Function('return this')();
-/******/ 			} catch (e) {
-/******/ 				if (typeof window === 'object') return window;
-/******/ 			}
-/******/ 		})();
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/load script */
-/******/ 	(() => {
-/******/ 		var inProgress = {};
-/******/ 		var dataWebpackPrefix = "client:";
-/******/ 		// loadScript function to load a script via script tag
-/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
-/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
-/******/ 			var script, needAttach;
-/******/ 			if(key !== undefined) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				for(var i = 0; i < scripts.length; i++) {
-/******/ 					var s = scripts[i];
-/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
-/******/ 				}
-/******/ 			}
-/******/ 			if(!script) {
-/******/ 				needAttach = true;
-/******/ 				script = document.createElement('script');
-/******/ 		
-/******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
-/******/ 				if (__webpack_require__.nc) {
-/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
-/******/ 				}
-/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
-/******/ 		
-/******/ 				script.src = url;
-/******/ 			}
-/******/ 			inProgress[url] = [done];
-/******/ 			var onScriptComplete = (prev, event) => {
-/******/ 				// avoid mem leaks in IE.
-/******/ 				script.onerror = script.onload = null;
-/******/ 				clearTimeout(timeout);
-/******/ 				var doneFns = inProgress[url];
-/******/ 				delete inProgress[url];
-/******/ 				script.parentNode && script.parentNode.removeChild(script);
-/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
-/******/ 				if(prev) return prev(event);
-/******/ 			}
-/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
-/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
-/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
-/******/ 			needAttach && document.head.appendChild(script);
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/publicPath */
-/******/ 	(() => {
-/******/ 		var scriptUrl;
-/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
-/******/ 		var document = __webpack_require__.g.document;
-/******/ 		if (!scriptUrl && document) {
-/******/ 			if (document.currentScript)
-/******/ 				scriptUrl = document.currentScript.src;
-/******/ 			if (!scriptUrl) {
-/******/ 				var scripts = document.getElementsByTagName("script");
-/******/ 				if(scripts.length) {
-/******/ 					var i = scripts.length - 1;
-/******/ 					while (i > -1 && !scriptUrl) scriptUrl = scripts[i--].src;
-/******/ 				}
-/******/ 			}
-/******/ 		}
-/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
-/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
-/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
-/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
-/******/ 		__webpack_require__.p = scriptUrl;
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"main": 0
-/******/ 		};
-/******/ 		
-/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
-/******/ 				// JSONP chunk loading for javascript
-/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
-/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
-/******/ 		
-/******/ 					// a Promise means "currently loading".
-/******/ 					if(installedChunkData) {
-/******/ 						promises.push(installedChunkData[2]);
-/******/ 					} else {
-/******/ 						if(true) { // all chunks have JS
-/******/ 							// setup Promise in chunk cache
-/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
-/******/ 							promises.push(installedChunkData[2] = promise);
-/******/ 		
-/******/ 							// start chunk loading
-/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
-/******/ 							// create error before stack unwound to get useful stacktrace later
-/******/ 							var error = new Error();
-/******/ 							var loadingEnded = (event) => {
-/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
-/******/ 									installedChunkData = installedChunks[chunkId];
-/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
-/******/ 									if(installedChunkData) {
-/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
-/******/ 										var realSrc = event && event.target && event.target.src;
-/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
-/******/ 										error.name = 'ChunkLoadError';
-/******/ 										error.type = errorType;
-/******/ 										error.request = realSrc;
-/******/ 										installedChunkData[1](error);
-/******/ 									}
-/******/ 								}
-/******/ 							};
-/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-/******/ 						}
-/******/ 					}
-/******/ 				}
-/******/ 		};
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		// no on chunks loaded
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 		
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkclient"] = self["webpackChunkclient"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./index.js");
-/******/ 	
-/******/ })()
-;
+(()=>{"use strict";var e,t,n={279:(e,t,n)=>{n.d(t,{L:()=>o,O:()=>r});const o={home:{pageId:"home"},invitation:{pageId:"invitation"},meetingRoom:{pageId:"meetingRoom"},callEnded:{pageId:"callEnded"}},r={new:{key:"new",displayMessage:"No Participant"},connecting:{key:"connecting",displayMessage:"Connecting..."},connected:{key:"connected",displayMessage:"Connected..."},disconnected:{key:"disconnected",displayMessage:"Disconnected!"},failed:{key:"failed",displayMessage:"Connection Failed!"},closed:{key:"closed",displayMessage:"Connection Closed!"}}},286:(e,t,n)=>{n.d(t,{Z:()=>i});var o=n(473),r=function(e,t,n,o){var _;t[0]=0;for(var i=1;i<t.length;i++){var l=t[i++],u=t[i]?(t[0]|=l?1:2,n[t[i++]]):t[++i];3===l?o[0]=u:4===l?o[1]=Object.assign(o[1]||{},u):5===l?(o[1]=o[1]||{})[t[++i]]=u:6===l?o[1][t[++i]]+=u+"":l?(_=e.apply(u,r(e,u,n,["",null])),o.push(_),u[0]?t[0]|=2:(t[i-2]=0,t[i]=_)):o.push(u)}return o},_=new Map;const i=function(e){var t=_.get(this);return t||(t=new Map,_.set(this,t)),(t=r(this,t.get(e)||(t.set(e,t=function(e){for(var t,n,o=1,r="",_="",i=[0],l=function(e){1===o&&(e||(r=r.replace(/^\s*\n\s*|\s*\n\s*$/g,"")))?i.push(0,e,r):3===o&&(e||r)?(i.push(3,e,r),o=2):2===o&&"..."===r&&e?i.push(4,e,0):2===o&&r&&!e?i.push(5,0,!0,r):o>=5&&((r||!e&&5===o)&&(i.push(o,0,r,n),o=6),e&&(i.push(o,e,0,n),o=6)),r=""},u=0;u<e.length;u++){u&&(1===o&&l(),l(u));for(var c=0;c<e[u].length;c++)t=e[u][c],1===o?"<"===t?(l(),i=[i],o=3):r+=t:4===o?"--"===r&&">"===t?(o=1,r=""):r=t+r[0]:_?t===_?_="":r+=t:'"'===t||"'"===t?_=t:">"===t?(l(),o=1):o&&("="===t?(o=5,n=r,r=""):"/"===t&&(o<5||">"===e[u][c+1])?(l(),3===o&&(i=i[0]),o=i,(i=i[0]).push(2,0,o),o=0):" "===t||"\t"===t||"\n"===t||"\r"===t?(l(),o=2):r+=t),3===o&&"!--"===r&&(o=4,i=i[0])}return l(),i}(e)),t),arguments,[])).length>1?t:t[0]}.bind(o.h)},473:(e,t,n)=>{n.d(t,{YM:()=>r,h:()=>v,sY:()=>D});var o,r,_,i,l,u,c,s={},a=[],d=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,f=Array.isArray;function p(e,t){for(var n in t)e[n]=t[n];return e}function h(e){var t=e.parentNode;t&&t.removeChild(e)}function v(e,t,n){var r,_,i,l={};for(i in t)"key"==i?r=t[i]:"ref"==i?_=t[i]:l[i]=t[i];if(arguments.length>2&&(l.children=arguments.length>3?o.call(arguments,2):n),"function"==typeof e&&null!=e.defaultProps)for(i in e.defaultProps)void 0===l[i]&&(l[i]=e.defaultProps[i]);return m(e,l,r,_,null)}function m(e,t,n,o,i){var l={type:e,props:t,key:n,ref:o,__k:null,__:null,__b:0,__e:null,__d:void 0,__c:null,__h:null,constructor:void 0,__v:null==i?++_:i};return null==i&&null!=r.vnode&&r.vnode(l),l}function g(e){return e.children}function y(e,t){this.props=e,this.context=t}function b(e,t){if(null==t)return e.__?b(e.__,e.__.__k.indexOf(e)+1):null;for(var n;t<e.__k.length;t++)if(null!=(n=e.__k[t])&&null!=n.__e)return n.__e;return"function"==typeof e.type?b(e):null}function k(e){var t,n;if(null!=(e=e.__)&&null!=e.__c){for(e.__e=e.__c.base=null,t=0;t<e.__k.length;t++)if(null!=(n=e.__k[t])&&null!=n.__e){e.__e=e.__c.base=n.__e;break}return k(e)}}function w(e){(!e.__d&&(e.__d=!0)&&i.push(e)&&!C.__r++||l!==r.debounceRendering)&&((l=r.debounceRendering)||u)(C)}function C(){var e,t,n,o,r,_,l,u,s;for(i.sort(c);e=i.shift();)e.__d&&(t=i.length,o=void 0,r=void 0,_=void 0,u=(l=(n=e).__v).__e,(s=n.__P)&&(o=[],r=[],(_=p({},l)).__v=l.__v+1,U(s,l,_,n.__n,void 0!==s.ownerSVGElement,null!=l.__h?[u]:null,o,null==u?b(l):u,l.__h,r),T(o,l,r),l.__e!=u&&k(l)),i.length>t&&i.sort(c));C.__r=0}function x(e,t,n,o,r,_,i,l,u,c,d){var p,h,v,y,k,w,C,x,I,S=0,E=o&&o.__k||a,P=E.length,T=P,N=t.length;for(n.__k=[],p=0;p<N;p++)null!=(y=n.__k[p]=null==(y=t[p])||"boolean"==typeof y||"function"==typeof y?null:"string"==typeof y||"number"==typeof y||"bigint"==typeof y?m(null,y,null,null,y):f(y)?m(g,{children:y},null,null,null):y.__b>0?m(y.type,y.props,y.key,y.ref?y.ref:null,y.__v):y)?(y.__=n,y.__b=n.__b+1,-1===(x=$(y,E,C=p+S,T))?v=s:(v=E[x]||s,E[x]=void 0,T--),U(e,y,v,r,_,i,l,u,c,d),k=y.__e,(h=y.ref)&&v.ref!=h&&(v.ref&&L(v.ref,null,y),d.push(h,y.__c||k,y)),null!=k&&(null==w&&(w=k),(I=v===s||null===v.__v)?-1==x&&S--:x!==C&&(x===C+1?S++:x>C?T>N-C?S+=x-C:S--:S=x<C&&x==C-1?x-C:0),C=p+S,"function"!=typeof y.type||x===C&&v.__k!==y.__k?"function"==typeof y.type||x===C&&!I?void 0!==y.__d?(u=y.__d,y.__d=void 0):u=k.nextSibling:u=H(e,k,u):u=M(y,u,e),"function"==typeof n.type&&(n.__d=u))):(v=E[p])&&null==v.key&&v.__e&&(v.__e==u&&(u=b(v)),Y(v,v,!1),E[p]=null);for(n.__e=w,p=P;p--;)null!=E[p]&&("function"==typeof n.type&&null!=E[p].__e&&E[p].__e==n.__d&&(n.__d=E[p].__e.nextSibling),Y(E[p],E[p]))}function M(e,t,n){for(var o,r=e.__k,_=0;r&&_<r.length;_++)(o=r[_])&&(o.__=e,t="function"==typeof o.type?M(o,t,n):H(n,o.__e,t));return t}function H(e,t,n){return null==n||n.parentNode!==e?e.insertBefore(t,null):t==n&&null!=t.parentNode||e.insertBefore(t,n),t.nextSibling}function $(e,t,n,o){var r=e.key,_=e.type,i=n-1,l=n+1,u=t[n];if(null===u||u&&r==u.key&&_===u.type)return n;if(o>(null!=u?1:0))for(;i>=0||l<t.length;){if(i>=0){if((u=t[i])&&r==u.key&&_===u.type)return i;i--}if(l<t.length){if((u=t[l])&&r==u.key&&_===u.type)return l;l++}}return-1}function I(e,t,n){"-"===t[0]?e.setProperty(t,null==n?"":n):e[t]=null==n?"":"number"!=typeof n||d.test(t)?n:n+"px"}function S(e,t,n,o,r){var _;e:if("style"===t)if("string"==typeof n)e.style.cssText=n;else{if("string"==typeof o&&(e.style.cssText=o=""),o)for(t in o)n&&t in n||I(e.style,t,"");if(n)for(t in n)o&&n[t]===o[t]||I(e.style,t,n[t])}else if("o"===t[0]&&"n"===t[1])_=t!==(t=t.replace(/(PointerCapture)$|Capture$/,"$1")),t=t.toLowerCase()in e?t.toLowerCase().slice(2):t.slice(2),e.l||(e.l={}),e.l[t+_]=n,n?o||e.addEventListener(t,_?P:E,_):e.removeEventListener(t,_?P:E,_);else if("dangerouslySetInnerHTML"!==t){if(r)t=t.replace(/xlink(H|:h)/,"h").replace(/sName$/,"s");else if("width"!==t&&"height"!==t&&"href"!==t&&"list"!==t&&"form"!==t&&"tabIndex"!==t&&"download"!==t&&"rowSpan"!==t&&"colSpan"!==t&&t in e)try{e[t]=null==n?"":n;break e}catch(e){}"function"==typeof n||(null==n||!1===n&&"-"!==t[4]?e.removeAttribute(t):e.setAttribute(t,n))}}function E(e){return this.l[e.type+!1](r.event?r.event(e):e)}function P(e){return this.l[e.type+!0](r.event?r.event(e):e)}function U(e,t,n,o,_,i,l,u,c,s){var a,d,h,v,m,b,k,w,C,M,H,$,I,S,E,P=t.type;if(void 0!==t.constructor)return null;null!=n.__h&&(c=n.__h,u=t.__e=n.__e,t.__h=null,i=[u]),(a=r.__b)&&a(t);e:if("function"==typeof P)try{if(w=t.props,C=(a=P.contextType)&&o[a.__c],M=a?C?C.props.value:a.__:o,n.__c?k=(d=t.__c=n.__c).__=d.__E:("prototype"in P&&P.prototype.render?t.__c=d=new P(w,M):(t.__c=d=new y(w,M),d.constructor=P,d.render=V),C&&C.sub(d),d.props=w,d.state||(d.state={}),d.context=M,d.__n=o,h=d.__d=!0,d.__h=[],d._sb=[]),null==d.__s&&(d.__s=d.state),null!=P.getDerivedStateFromProps&&(d.__s==d.state&&(d.__s=p({},d.__s)),p(d.__s,P.getDerivedStateFromProps(w,d.__s))),v=d.props,m=d.state,d.__v=t,h)null==P.getDerivedStateFromProps&&null!=d.componentWillMount&&d.componentWillMount(),null!=d.componentDidMount&&d.__h.push(d.componentDidMount);else{if(null==P.getDerivedStateFromProps&&w!==v&&null!=d.componentWillReceiveProps&&d.componentWillReceiveProps(w,M),!d.__e&&(null!=d.shouldComponentUpdate&&!1===d.shouldComponentUpdate(w,d.__s,M)||t.__v===n.__v)){for(t.__v!==n.__v&&(d.props=w,d.state=d.__s,d.__d=!1),t.__e=n.__e,t.__k=n.__k,t.__k.forEach((function(e){e&&(e.__=t)})),H=0;H<d._sb.length;H++)d.__h.push(d._sb[H]);d._sb=[],d.__h.length&&l.push(d);break e}null!=d.componentWillUpdate&&d.componentWillUpdate(w,d.__s,M),null!=d.componentDidUpdate&&d.__h.push((function(){d.componentDidUpdate(v,m,b)}))}if(d.context=M,d.props=w,d.__P=e,d.__e=!1,$=r.__r,I=0,"prototype"in P&&P.prototype.render){for(d.state=d.__s,d.__d=!1,$&&$(t),a=d.render(d.props,d.state,d.context),S=0;S<d._sb.length;S++)d.__h.push(d._sb[S]);d._sb=[]}else do{d.__d=!1,$&&$(t),a=d.render(d.props,d.state,d.context),d.state=d.__s}while(d.__d&&++I<25);d.state=d.__s,null!=d.getChildContext&&(o=p(p({},o),d.getChildContext())),h||null==d.getSnapshotBeforeUpdate||(b=d.getSnapshotBeforeUpdate(v,m)),x(e,f(E=null!=a&&a.type===g&&null==a.key?a.props.children:a)?E:[E],t,n,o,_,i,l,u,c,s),d.base=t.__e,t.__h=null,d.__h.length&&l.push(d),k&&(d.__E=d.__=null)}catch(e){t.__v=null,(c||null!=i)&&(t.__e=u,t.__h=!!c,i[i.indexOf(u)]=null),r.__e(e,t,n)}else null==i&&t.__v===n.__v?(t.__k=n.__k,t.__e=n.__e):t.__e=N(n.__e,t,n,o,_,i,l,c,s);(a=r.diffed)&&a(t)}function T(e,t,n){for(var o=0;o<n.length;o++)L(n[o],n[++o],n[++o]);r.__c&&r.__c(t,e),e.some((function(t){try{e=t.__h,t.__h=[],e.some((function(e){e.call(t)}))}catch(e){r.__e(e,t.__v)}}))}function N(e,t,n,r,_,i,l,u,c){var a,d,p,v=n.props,m=t.props,g=t.type,y=0;if("svg"===g&&(_=!0),null!=i)for(;y<i.length;y++)if((a=i[y])&&"setAttribute"in a==!!g&&(g?a.localName===g:3===a.nodeType)){e=a,i[y]=null;break}if(null==e){if(null===g)return document.createTextNode(m);e=_?document.createElementNS("http://www.w3.org/2000/svg",g):document.createElement(g,m.is&&m),i=null,u=!1}if(null===g)v===m||u&&e.data===m||(e.data=m);else{if(i=i&&o.call(e.childNodes),d=(v=n.props||s).dangerouslySetInnerHTML,p=m.dangerouslySetInnerHTML,!u){if(null!=i)for(v={},y=0;y<e.attributes.length;y++)v[e.attributes[y].name]=e.attributes[y].value;(p||d)&&(p&&(d&&p.__html==d.__html||p.__html===e.innerHTML)||(e.innerHTML=p&&p.__html||""))}if(function(e,t,n,o,r){var _;for(_ in n)"children"===_||"key"===_||_ in t||S(e,_,null,n[_],o);for(_ in t)r&&"function"!=typeof t[_]||"children"===_||"key"===_||"value"===_||"checked"===_||n[_]===t[_]||S(e,_,t[_],n[_],o)}(e,m,v,_,u),p)t.__k=[];else if(x(e,f(y=t.props.children)?y:[y],t,n,r,_&&"foreignObject"!==g,i,l,i?i[0]:n.__k&&b(n,0),u,c),null!=i)for(y=i.length;y--;)null!=i[y]&&h(i[y]);u||("value"in m&&void 0!==(y=m.value)&&(y!==e.value||"progress"===g&&!y||"option"===g&&y!==v.value)&&S(e,"value",y,v.value,!1),"checked"in m&&void 0!==(y=m.checked)&&y!==e.checked&&S(e,"checked",y,v.checked,!1))}return e}function L(e,t,n){try{"function"==typeof e?e(t):e.current=t}catch(e){r.__e(e,n)}}function Y(e,t,n){var o,_;if(r.unmount&&r.unmount(e),(o=e.ref)&&(o.current&&o.current!==e.__e||L(o,null,t)),null!=(o=e.__c)){if(o.componentWillUnmount)try{o.componentWillUnmount()}catch(e){r.__e(e,t)}o.base=o.__P=null,e.__c=void 0}if(o=e.__k)for(_=0;_<o.length;_++)o[_]&&Y(o[_],t,n||"function"!=typeof e.type);n||null==e.__e||h(e.__e),e.__=e.__e=e.__d=void 0}function V(e,t,n){return this.constructor(e,n)}function D(e,t,n){var _,i,l,u;r.__&&r.__(e,t),i=(_="function"==typeof n)?null:n&&n.__k||t.__k,l=[],u=[],U(t,e=(!_&&n||t).__k=v(g,null,[e]),i||s,s,void 0!==t.ownerSVGElement,!_&&n?[n]:i?null:t.firstChild?o.call(t.childNodes):null,l,!_&&n?n:i?i.__e:t.firstChild,_,u),T(l,e,u)}o=a.slice,r={__e:function(e,t,n,o){for(var r,_,i;t=t.__;)if((r=t.__c)&&!r.__)try{if((_=r.constructor)&&null!=_.getDerivedStateFromError&&(r.setState(_.getDerivedStateFromError(e)),i=r.__d),null!=r.componentDidCatch&&(r.componentDidCatch(e,o||{}),i=r.__d),i)return r.__E=r}catch(t){e=t}throw e}},_=0,y.prototype.setState=function(e,t){var n;n=null!=this.__s&&this.__s!==this.state?this.__s:this.__s=p({},this.state),"function"==typeof e&&(e=e(p({},n),this.props)),e&&p(n,e),null!=e&&this.__v&&(t&&this._sb.push(t),w(this))},y.prototype.forceUpdate=function(e){this.__v&&(this.__e=!0,e&&this.__h.push(e),w(this))},y.prototype.render=g,i=[],u="function"==typeof Promise?Promise.prototype.then.bind(Promise.resolve()):setTimeout,c=function(e,t){return e.__v.__b-t.__v.__b},C.__r=0},792:(e,t,n)=>{n.d(t,{I4:()=>k,Ye:()=>b,d4:()=>g,eJ:()=>m,sO:()=>y});var o,r,_,i,l=n(473),u=0,c=[],s=[],a=l.YM.__b,d=l.YM.__r,f=l.YM.diffed,p=l.YM.__c,h=l.YM.unmount;function v(e,t){l.YM.__h&&l.YM.__h(r,e,u||t),u=0;var n=r.__H||(r.__H={__:[],__h:[]});return e>=n.__.length&&n.__.push({__V:s}),n.__[e]}function m(e){return u=1,function(e,t,n){var _=v(o++,2);if(_.t=e,!_.__c&&(_.__=[I(void 0,t),function(e){var t=_.__N?_.__N[0]:_.__[0],n=_.t(t,e);t!==n&&(_.__N=[n,_.__[1]],_.__c.setState({}))}],_.__c=r,!r.u)){var i=function(e,t,n){if(!_.__c.__H)return!0;var o=_.__c.__H.__.filter((function(e){return e.__c}));if(o.every((function(e){return!e.__N})))return!l||l.call(this,e,t,n);var r=!1;return o.forEach((function(e){if(e.__N){var t=e.__[0];e.__=e.__N,e.__N=void 0,t!==e.__[0]&&(r=!0)}})),!(!r&&_.__c.props===e)&&(!l||l.call(this,e,t,n))};r.u=!0;var l=r.shouldComponentUpdate,u=r.componentWillUpdate;r.componentWillUpdate=function(e,t,n){if(this.__e){var o=l;l=void 0,i(e,t,n),l=o}u&&u.call(this,e,t,n)},r.shouldComponentUpdate=i}return _.__N||_.__}(I,e)}function g(e,t){var n=v(o++,3);!l.YM.__s&&$(n.__H,t)&&(n.__=e,n.i=t,r.__H.__h.push(n))}function y(e){return u=5,b((function(){return{current:e}}),[])}function b(e,t){var n=v(o++,7);return $(n.__H,t)?(n.__V=e(),n.i=t,n.__h=e,n.__V):n.__}function k(e,t){return u=8,b((function(){return e}),t)}function w(){for(var e;e=c.shift();)if(e.__P&&e.__H)try{e.__H.__h.forEach(M),e.__H.__h.forEach(H),e.__H.__h=[]}catch(t){e.__H.__h=[],l.YM.__e(t,e.__v)}}l.YM.__b=function(e){r=null,a&&a(e)},l.YM.__r=function(e){d&&d(e),o=0;var t=(r=e.__c).__H;t&&(_===r?(t.__h=[],r.__h=[],t.__.forEach((function(e){e.__N&&(e.__=e.__N),e.__V=s,e.__N=e.i=void 0}))):(t.__h.forEach(M),t.__h.forEach(H),t.__h=[],o=0)),_=r},l.YM.diffed=function(e){f&&f(e);var t=e.__c;t&&t.__H&&(t.__H.__h.length&&(1!==c.push(t)&&i===l.YM.requestAnimationFrame||((i=l.YM.requestAnimationFrame)||x)(w)),t.__H.__.forEach((function(e){e.i&&(e.__H=e.i),e.__V!==s&&(e.__=e.__V),e.i=void 0,e.__V=s}))),_=r=null},l.YM.__c=function(e,t){t.some((function(e){try{e.__h.forEach(M),e.__h=e.__h.filter((function(e){return!e.__||H(e)}))}catch(n){t.some((function(e){e.__h&&(e.__h=[])})),t=[],l.YM.__e(n,e.__v)}})),p&&p(e,t)},l.YM.unmount=function(e){h&&h(e);var t,n=e.__c;n&&n.__H&&(n.__H.__.forEach((function(e){try{M(e)}catch(e){t=e}})),n.__H=void 0,t&&l.YM.__e(t,n.__v))};var C="function"==typeof requestAnimationFrame;function x(e){var t,n=function(){clearTimeout(o),C&&cancelAnimationFrame(t),setTimeout(e)},o=setTimeout(n,100);C&&(t=requestAnimationFrame(n))}function M(e){var t=r,n=e.__c;"function"==typeof n&&(e.__c=void 0,n()),r=t}function H(e){var t=r;e.__c=e.__(),r=t}function $(e,t){return!e||e.length!==t.length||t.some((function(t,n){return t!==e[n]}))}function I(e,t){return"function"==typeof t?t(e):t}}},o={};function r(e){var t=o[e];if(void 0!==t)return t.exports;var _=o[e]={exports:{}};return n[e](_,_.exports,r),_.exports}r.m=n,r.d=(e,t)=>{for(var n in t)r.o(t,n)&&!r.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:t[n]})},r.f={},r.e=e=>Promise.all(Object.keys(r.f).reduce(((t,n)=>(r.f[n](e,t),t)),[])),r.u=e=>e+".bundle.js",r.miniCssF=e=>{},r.g=function(){if("object"==typeof globalThis)return globalThis;try{return this||new Function("return this")()}catch(e){if("object"==typeof window)return window}}(),r.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),e={},t="client:",r.l=(n,o,_,i)=>{if(e[n])e[n].push(o);else{var l,u;if(void 0!==_)for(var c=document.getElementsByTagName("script"),s=0;s<c.length;s++){var a=c[s];if(a.getAttribute("src")==n||a.getAttribute("data-webpack")==t+_){l=a;break}}l||(u=!0,(l=document.createElement("script")).charset="utf-8",l.timeout=120,r.nc&&l.setAttribute("nonce",r.nc),l.setAttribute("data-webpack",t+_),l.src=n),e[n]=[o];var d=(t,o)=>{l.onerror=l.onload=null,clearTimeout(f);var r=e[n];if(delete e[n],l.parentNode&&l.parentNode.removeChild(l),r&&r.forEach((e=>e(o))),t)return t(o)},f=setTimeout(d.bind(null,void 0,{type:"timeout",target:l}),12e4);l.onerror=d.bind(null,l.onerror),l.onload=d.bind(null,l.onload),u&&document.head.appendChild(l)}},r.r=e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},(()=>{var e;r.g.importScripts&&(e=r.g.location+"");var t=r.g.document;if(!e&&t&&(t.currentScript&&(e=t.currentScript.src),!e)){var n=t.getElementsByTagName("script");if(n.length)for(var o=n.length-1;o>-1&&!e;)e=n[o--].src}if(!e)throw new Error("Automatic publicPath is not supported in this browser");e=e.replace(/#.*$/,"").replace(/\?.*$/,"").replace(/\/[^\/]+$/,"/"),r.p=e})(),(()=>{var e={179:0};r.f.j=(t,n)=>{var o=r.o(e,t)?e[t]:void 0;if(0!==o)if(o)n.push(o[2]);else{var _=new Promise(((n,r)=>o=e[t]=[n,r]));n.push(o[2]=_);var i=r.p+r.u(t),l=new Error;r.l(i,(n=>{if(r.o(e,t)&&(0!==(o=e[t])&&(e[t]=void 0),o)){var _=n&&("load"===n.type?"missing":n.type),i=n&&n.target&&n.target.src;l.message="Loading chunk "+t+" failed.\n("+_+": "+i+")",l.name="ChunkLoadError",l.type=_,l.request=i,o[1](l)}}),"chunk-"+t,t)}};var t=(t,n)=>{var o,_,[i,l,u]=n,c=0;if(i.some((t=>0!==e[t]))){for(o in l)r.o(l,o)&&(r.m[o]=l[o]);u&&u(r)}for(t&&t(n);c<i.length;c++)_=i[c],r.o(e,_)&&e[_]&&e[_][0](),e[_]=0},n=self.webpackChunkclient=self.webpackChunkclient||[];n.forEach(t.bind(null,0)),n.push=t.bind(null,n.push.bind(n))})(),(()=>{var e=r(473),t=r(286),n=r(792),o=r(279);const _={randomUUID:"undefined"!=typeof crypto&&crypto.randomUUID&&crypto.randomUUID.bind(crypto)};let i;const l=new Uint8Array(16);function u(){if(!i&&(i="undefined"!=typeof crypto&&crypto.getRandomValues&&crypto.getRandomValues.bind(crypto),!i))throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");return i(l)}const c=[];for(let e=0;e<256;++e)c.push((e+256).toString(16).slice(1));const s=function(e,t,n){if(_.randomUUID&&!t&&!e)return _.randomUUID();const o=(e=e||{}).random||(e.rng||u)();if(o[6]=15&o[6]|64,o[8]=63&o[8]|128,t){n=n||0;for(let e=0;e<16;++e)t[n+e]=o[e];return t}return function(e,t=0){return(c[e[t+0]]+c[e[t+1]]+c[e[t+2]]+c[e[t+3]]+"-"+c[e[t+4]]+c[e[t+5]]+"-"+c[e[t+6]]+c[e[t+7]]+"-"+c[e[t+8]]+c[e[t+9]]+"-"+c[e[t+10]]+c[e[t+11]]+c[e[t+12]]+c[e[t+13]]+c[e[t+14]]+c[e[t+15]]).toLowerCase()}(o)},a=e=>`${window.location.href}?roomId=${e}`,d=({roomId:e,setRoomId:n,redirectToPage:r,setInvitationUrl:_})=>t.Z`<div class="d-flex full-page-container flex-centered">
+    <div class="border-l-gray border-radius-s p-xxl w-25 m-w-100 m-m-l m-p-l">
+      <div class="p-xl m-p-s">
+        <div
+          class="d-flex flex-align-items-stretch border-xs-gray border-radius-s w-100"
+        >
+          <input
+            value=${e}
+            onInput=${e=>{e.preventDefault;const{value:t}=e.target;n(t)}}
+            class="border-0 flex-1"
+            placeholder="Enter room Id"
+          />
+          <button class="border-0" onclick="${()=>{const t=a(e);location.assign(t)}}">Join Room</button>
+        </div>
+      </div>
+      <div class="title text-center">OR</div>
+      <div class="p-xl m-p-s">
+        <button
+          onclick=${()=>{const e=s(),t=a(e);_(t),n(e),r(o.L.invitation.pageId)}}
+          class="button button-primary w-100 border-radius-s"
+        >
+          Start New Meeting
+        </button>
+      </div>
+    </div>
+  </div>`,f=()=>t.Z`
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_620_4)">
+        <path
+          d="M19 2C19.5304 2 20.0391 2.21071 20.4142 2.58579C20.7893 2.96086 21 3.46957 21 4V16C21 16.5304 20.7893 17.0391 20.4142 17.4142C20.0391 17.7893 19.5304 18 19 18H17V20C17 20.5304 16.7893 21.0391 16.4142 21.4142C16.0391 21.7893 15.5304 22 15 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V8C3 7.46957 3.21071 6.96086 3.58579 6.58579C3.96086 6.21071 4.46957 6 5 6H7V4C7 3.46957 7.21071 2.96086 7.58579 2.58579C7.96086 2.21071 8.46957 2 9 2H19ZM15 8H5V20H15V8ZM10 15C10.2652 15 10.5196 15.1054 10.7071 15.2929C10.8946 15.4804 11 15.7348 11 16C11 16.2652 10.8946 16.5196 10.7071 16.7071C10.5196 16.8946 10.2652 17 10 17H8C7.73478 17 7.48043 16.8946 7.29289 16.7071C7.10536 16.5196 7 16.2652 7 16C7 15.7348 7.10536 15.4804 7.29289 15.2929C7.48043 15.1054 7.73478 15 8 15H10ZM19 4H9V6H15C15.5304 6 16.0391 6.21071 16.4142 6.58579C16.7893 6.96086 17 7.46957 17 8V16H19V4ZM12 11C12.2549 11.0003 12.5 11.0979 12.6854 11.2728C12.8707 11.4478 12.9822 11.687 12.9972 11.9414C13.0121 12.1958 12.9293 12.4464 12.7657 12.6418C12.6021 12.8373 12.3701 12.9629 12.117 12.993L12 13H8C7.74512 12.9997 7.49997 12.9021 7.31463 12.7272C7.1293 12.5522 7.01777 12.313 7.00283 12.0586C6.98789 11.8042 7.07067 11.5536 7.23426 11.3582C7.39786 11.1627 7.6299 11.0371 7.883 11.007L8 11H12Z"
+          fill="#545454"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_620_4">
+          <rect width="24" height="24" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  `,p="info-box d-flex flex-justify-content-space-between flex-align-items-center flex-gap-xl",h=`${p} background-success `,v=({invitationUrl:e,roomId:o})=>{const[r,_]=(0,n.eJ)(!1),[i,l]=(0,n.eJ)(!1),u=e=>{navigator.clipboard.writeText(e)};return t.Z`<div class="d-flex full-page-container flex-centered">
+    <div>
+      <h4 class="title text-center">Share your call invite</h4>
+      <p class="text-light text-center">
+        Share the invitation link or room ID with the individuals you wish to
+        connect with.
+      </p>
+      <div
+        class=${r?h:p}
+      >
+        <div>
+          <div class="text-label">Invitation Link</div>
+          <div>${e}</div>
+        </div>
+        <div>
+          <button onclick=${()=>{u(e),_(!0),l(!1)}} class="border-0">
+            <${f} />
+          </button>
+        </div>
+      </div>
+      <div
+        class=${i?h:p}
+      >
+        <div>
+          <div class="text-label">Room Id</div>
+          <div>${o}</div>
+        </div>
+        <div>
+          <button onclick=${()=>{u(o),_(!1),l(!0)}} class="border-0">
+            <${f} />
+          </button>
+        </div>
+      </div>
+      <div class="text-center">
+        <button onclick=${()=>{location.assign(e)}} class="button-primary">Start Call</button>
+      </div>
+    </div>
+  </div>`},m=()=>t.Z`<div class="d-flex full-page-container flex-centered">
+    <div>
+      <p class="text-center">Call Ended!</p>
+      <button onclick="${()=>{location.assign("/")}}">Go to Home Page</button>
+    </div>
+  </div>`,g=(y=()=>Promise.all([r.e(177),r.e(608)]).then(r.bind(r,608)),function(t){const[o,r]=(0,n.eJ)(null);return(0,n.d4)((()=>{!async function(){const n=await y();r((0,e.h)(n.default,t))}()}),[]),o});var y;(0,e.sY)(t.Z`<${()=>{const e=(()=>{const e=window.location.search;return new URLSearchParams(e).get("roomId")})(),[r,_]=(0,n.eJ)(e),[i,l]=(0,n.eJ)(e?o.L.meetingRoom.pageId:o.L.home.pageId),[u,c]=(0,n.eJ)();return(0,n.Ye)((()=>{switch(i){case o.L.home.pageId:return t.Z`<${d}
+          redirectToPage=${l}
+          roomId=${r}
+          setRoomId=${_}
+          setInvitationUrl=${c}
+        />`;case o.L.invitation.pageId:return t.Z`<${v}
+          invitationUrl=${u}
+          redirectToPage=${l}
+          roomId=${r}
+        />`;case o.L.meetingRoom.pageId:return t.Z`<${g}
+          roomId=${r}
+          redirectToPage=${l}
+        /> `;case o.L.callEnded.pageId:return t.Z`<${m} />`}}))}} />`,document.getElementById("root"))})()})();

@@ -10,6 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "css-loader": "^6.8.1",
+    "css-minimizer-webpack-plugin": "^5.0.1",
     "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "mini-css-extract-plugin": "^2.7.6",
+    "webpack-cli": "^5.1.4"
   }
 }
