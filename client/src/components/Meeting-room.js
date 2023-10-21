@@ -249,7 +249,7 @@ const MeetingRoom = ({ roomId, redirectToPage }) => {
   const overlay = useMemo(() => {
     if (connectionStatus === CONNECTION_STATES.connected.key) {
       return html`<div
-        class="position-absolute position-full-screen h-100 d-flex flex-centered 1"
+        class="position-absolute position-full-screen h-100 d-flex flex-centered"
       >
         ${!isRemoteAudioTrackAvailable ? html` <${MicMute} />` : null}
         ${!isRemoteVideoTrackAvailable ? html` <${VideoMute} />` : null}
@@ -260,14 +260,14 @@ const MeetingRoom = ({ roomId, redirectToPage }) => {
   return html`<div
     class="full-page-container h-100 d-flex flex-direction-column background-dark"
   >
-    <div class="position-relative flex-1">
+    <div class="position-relative flex-1 ">
       ${overlay}
-      <div class="d-flex flex-centered h-100 max-w-100">
+      <div class="d-flex flex-centered  max-w-100 remote-video-container h-100">
         ${remoteVideoPlayer}
       </div>
       ${localVideoPlayer}
     </div>
-    <div class="background-gray d-flex flex-centered p-l">
+    <div class="background-gray d-flex flex-centered p-l bottom-bar">
       <div class="d-flex flex-justify-content-space-between w-50 m-w-100">
         <${IconButton}
           icon=${isSharingScreen ? ShareScreenIcon : ShareScreenMuteIcon}

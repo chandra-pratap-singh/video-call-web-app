@@ -215,6 +215,14 @@ button {
   bottom: 16px;
 }
 
+.bottom-bar {
+  height: 48px;
+}
+
+.remote-video-container {
+  height: calc(100vh-64px);
+}
+
 /* works only on mobile screen */
 
 @media (max-width: 767px) {
